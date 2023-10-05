@@ -1,0 +1,169 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+enum Roles {
+  OWNER
+  EMPLOYEE
+  CLIENT
+}
+
+model User {
+  id            String         @id @default(auto()) @map("_id") @db.ObjectId
+  firstName     String?        @unique
+  lastName      String?        
+  email         String?        @unique
+  emailVerified DateTime?
+  password      String?
+  image         String?
+  role          Roles          @default(CLIENT)
+  laptops       Laptop[]       @relation("UserToLaptop")
+  graphics      Graphic[]      @relation("UserToGraphic")
+  category      Category[]     @relation("UserToCategory")
+  laptopOrders  LaptopOrder[]  @relation("UserToLaptopOrder")
+  graphicOrders GraphicOrder[] @relation("UserToGraphicOrder")
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Laptop {
+  id         String        @id @default(auto()) @map("_id") @db.ObjectId
+  name       String        @unique
+  brand      String
+  model      String
+  quantity   Float
+  screenSize Float
+  RAM        String
+  storage    String
+  color      String
+  image      String[]
+  price      Float
+  orderId    String[]      @db.ObjectId
+  order      LaptopOrder[] @relation(fields: [orderId], references: [id])
+  userId     String        @db.ObjectId
+  user       User          @relation("UserToLaptop", fields: [userId], references: [id], onDelete: Cascade)
+  createdAt  DateTime      @default(now())
+  updatedAt  DateTime      @updatedAt
+}
+
+model Category {
+  id          String    @id @default(auto()) @map("_id") @db.ObjectId
+  name        String    @unique
+  description String
+  graphic     Graphic[]
+  userId      String    @db.ObjectId
+  user        User      @relation("UserToCategory", fields: [userId], references: [id])
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+}
+
+model Graphic {
+  id           String         @id @default(auto()) @map("_id") @db.ObjectId
+  name         String         @unique
+  description  String
+  quantity     Float
+  thickness    Float?         @default(0)
+  cornerId     String[]       @db.ObjectId
+  corners      Corners[]      @relation("GraphicToCorner", fields: [cornerId], references: [id])
+  materialId   String[]       @db.ObjectId
+  material     Materials[]    @relation("GraphicToMaterial", fields: [materialId], references: [id])
+  size         Size[]         @default([])
+  price        Float
+  image        String[]
+  color        String[]       @default([])
+  laminationId String[]       @db.ObjectId
+  lamination   Lamination[]   @relation("GraphicToLamination", fields: [laminationId], references: [id])
+  categoryId   String         @db.ObjectId
+  category     Category       @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  orderId      String[]       @db.ObjectId
+  order        GraphicOrder[] @relation("GraphicToGraphicOrder", fields: [orderId], references: [id])
+  userId       String         @db.ObjectId
+  user         User           @relation("UserToGraphic", fields: [userId], references: [id], onDelete: Cascade)
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
+
+  @@index([userId])
+}
+
+model Lamination {
+  id        String    @id @default(auto()) @map("_id") @db.ObjectId
+  name      String    @unique
+  image     String
+  graphicId String[]  @db.ObjectId
+  graphics  Graphic[] @relation("GraphicToLamination", fields: [graphicId], references: [id])
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+}
+
+model Corners {
+  id        String    @id @default(auto()) @map("_id") @db.ObjectId
+  name      String    @unique
+  image     String
+  graphicId String[]  @db.ObjectId
+  graphics  Graphic[] @relation("GraphicToCorner", fields: [graphicId], references: [id])
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+}
+
+model Materials {
+  id        String    @id @default(auto()) @map("_id") @db.ObjectId
+  name      String    @unique
+  image     String
+  graphicId String[]  @db.ObjectId
+  graphics  Graphic[] @relation("GraphicToMaterial", fields: [graphicId], references: [id])
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+}
+
+enum Size {
+  large
+  small
+  meduim
+  extraLarge
+  doubleExtraLarge
+}
+
+model LaptopOrder {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId    String   @db.ObjectId
+  user      User     @relation("UserToLaptopOrder", fields: [userId], references: [id])
+  name      String   @default("")
+  email     String   @default("")
+  phone     String   @default("")
+  address   String   @default("")
+  laptopId  String[] @db.ObjectId
+  laptops   Laptop[] @relation(fields: [laptopId], references: [id])
+  isPaid    Boolean  @default(false)
+  pricePaid Float
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([userId])
+}
+
+model GraphicOrder {
+  id        String    @id @default(auto()) @map("_id") @db.ObjectId
+  userId    String    @db.ObjectId
+  user      User      @relation("UserToGraphicOrder", fields: [userId], references: [id])
+  name      String    @default("")
+  email     String    @default("")
+  phone     String    @default("")
+  address   String    @default("")
+  graphicId String[]  @db.ObjectId
+  graphics  Graphic[] @relation("GraphicToGraphicOrder", fields: [graphicId], references: [id])
+  isPaid    Boolean   @default(false)
+  pricePaid Float
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+
+  @@index([userId])
+}

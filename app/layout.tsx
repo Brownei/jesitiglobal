@@ -1,7 +1,10 @@
 import { Toaster } from 'sonner'
 import './globals.css'
 import type { Metadata } from 'next'
-
+import ClientProvider from '@/provider/ClientProvider'
+import CustomCursor from '@/components/Cursor'
+import Banner from '@/components/Banner'
+import Nav from '@/components/Nav'
 
 export const metadata: Metadata = {
   title: 'JEsitiGlobal',
@@ -14,10 +17,15 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en">
+    <html>
       <body>
-        <Toaster richColors/>
-        {children}
+        <Banner />
+        <Nav />
+        <CustomCursor />
+        <ClientProvider>
+          <Toaster richColors/>
+          {children}
+        </ClientProvider>
       </body>
     </html>
   )

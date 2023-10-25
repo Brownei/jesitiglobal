@@ -1,31 +1,34 @@
 "use client"
 import { create } from 'zustand';
 import {z} from 'zod'
+import axios from 'axios';
+
 
 export const UserSchema = z.object({
-    id: z.string(),
-    firstName: z.string().min(5, "The name of this user needs to be more than 5 characters"),
-    lastName: z.string().min(5, "The name of this user needs to be more than 5 characters"),
-    emailVerified: z.date(),
+    createdAt: z.date().or(z.string()),
     email: z.string().email(),
-    image: z.string(),
+    emailVerified: z.date().nullable(),
+    firstName: z.string().min(5, "The name of this user needs to be more than 5 characters"),
+    id: z.number(),
+    image: z.string().nullable(),
+    lastName: z.string().min(5, "The name of this user needs to be more than 5 characters"),
     role: z.enum(["OWNER", "EMPLOYEE", "CLIENT"]),
-    createdAt: z.date(),
-    updatedAt: z.date()
+    updatedAt: z.date().or(z.string())
 })
 
 export type User = z.infer<typeof UserSchema>
 
-type CurrentUserState = {
-    currentUser: User | null
+
+type State = {
+    currentUser: User | null;
 }
 
-type CurrentUserAction = {
-    onChange: (user: User) => void
+type Action = {
+    onChange: (user: User) => void;
     onRemove: () => void
 }
 
-export const useCurrentUsereStore = create<CurrentUserState & CurrentUserAction>((set) => ({
+export const useUserStore = create<State & Action>((set) => ({
     currentUser: null,
     onChange: (user) => {
         set({currentUser: user})

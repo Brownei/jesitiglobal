@@ -6,8 +6,8 @@ generator client {
 }
 
 datasource db {
-  provider = "mongodb"
-  url      = env("DATABASE_URL")
+  provider = "mysql"
+  url      = env("MYSQL_URL")
 }
 
 enum Roles {
@@ -17,9 +17,9 @@ enum Roles {
 }
 
 model User {
-  id            String         @id @default(auto()) @map("_id") @db.ObjectId
-  firstName     String?        @unique
-  lastName      String?        
+  id            Int            @id @default(autoincrement())
+  firstName     String?        
+  lastName      String?
   email         String?        @unique
   emailVerified DateTime?
   password      String?
@@ -36,112 +36,134 @@ model User {
 }
 
 model Laptop {
-  id         String        @id @default(auto()) @map("_id") @db.ObjectId
-  name       String        @unique
-  brand      String
-  model      String
+  id         Int           @id @default(autoincrement())
+  name       String        @unique @db.VarChar(30)
+  brand      String        @db.VarChar(30)
+  model      String        @db.VarChar(30)
   quantity   Float
   screenSize Float
   RAM        String
   storage    String
   color      String
-  image      String[]
+  image      Image[]
   price      Float
-  orderId    String[]      @db.ObjectId
-  order      LaptopOrder[] @relation(fields: [orderId], references: [id])
-  userId     String        @db.ObjectId
+  order      LaptopOrder[]
+  userId     Int
   user       User          @relation("UserToLaptop", fields: [userId], references: [id], onDelete: Cascade)
   createdAt  DateTime      @default(now())
   updatedAt  DateTime      @updatedAt
 }
 
 model Category {
-  id          String    @id @default(auto()) @map("_id") @db.ObjectId
+  id          Int       @id @default(autoincrement())
   name        String    @unique
   description String
   graphic     Graphic[]
-  userId      String    @db.ObjectId
+  userId      Int
   user        User      @relation("UserToCategory", fields: [userId], references: [id])
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
 }
 
 model Graphic {
-  id           String         @id @default(auto()) @map("_id") @db.ObjectId
-  name         String         @unique
-  description  String
-  quantity     Float
-  thickness    Float?         @default(0)
-  cornerId     String[]       @db.ObjectId
-  corners      Corners[]      @relation("GraphicToCorner", fields: [cornerId], references: [id])
-  materialId   String[]       @db.ObjectId
-  material     Materials[]    @relation("GraphicToMaterial", fields: [materialId], references: [id])
-  size         Size[]         @default([])
-  price        Float
-  image        String[]
-  color        String[]       @default([])
-  laminationId String[]       @db.ObjectId
-  lamination   Lamination[]   @relation("GraphicToLamination", fields: [laminationId], references: [id])
-  categoryId   String         @db.ObjectId
-  category     Category       @relation(fields: [categoryId], references: [id], onDelete: Cascade)
-  orderId      String[]       @db.ObjectId
-  order        GraphicOrder[] @relation("GraphicToGraphicOrder", fields: [orderId], references: [id])
-  userId       String         @db.ObjectId
-  user         User           @relation("UserToGraphic", fields: [userId], references: [id], onDelete: Cascade)
-  createdAt    DateTime       @default(now())
-  updatedAt    DateTime       @updatedAt
+  id          Int            @id @default(autoincrement())
+  name        String         @unique
+  description String
+  quantity    Float
+  thickness   Float?         @default(0)
+  corners     Corners[]
+  material    Materials[]
+  size        Size[]
+  price       Float
+  image       Image[]
+  color       Color[]
+  lamination  Lamination[]
+  categoryId  Int
+  category    Category       @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  order       GraphicOrder[]
+  userId      Int
+  user        User           @relation("UserToGraphic", fields: [userId], references: [id], onDelete: Cascade)
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @updatedAt
 
   @@index([userId])
 }
 
+model Color {
+  id       Int       @id @default(autoincrement())
+  name     String    @db.VarChar(20)
+  value    String    @db.VarChar(10)
+  graphics Graphic[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Size {
+  id       Int       @id @default(autoincrement())
+  name     String    @db.VarChar(20)
+  value    String    @db.VarChar(10)
+  graphics Graphic[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Image {
+  id        Int      @id @default(autoincrement())
+  url       String
+  graphicId Int
+  graphics  Graphic  @relation(fields: [graphicId], references: [id])
+  laptopId  Int
+  laptops   Laptop   @relation(fields: [laptopId], references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
 model Lamination {
-  id        String    @id @default(auto()) @map("_id") @db.ObjectId
+  id        Int       @id @default(autoincrement())
   name      String    @unique
   image     String
-  graphicId String[]  @db.ObjectId
-  graphics  Graphic[] @relation("GraphicToLamination", fields: [graphicId], references: [id])
+  graphics  Graphic[]
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
 }
 
 model Corners {
-  id        String    @id @default(auto()) @map("_id") @db.ObjectId
+  id        Int       @id @default(autoincrement())
   name      String    @unique
   image     String
-  graphicId String[]  @db.ObjectId
-  graphics  Graphic[] @relation("GraphicToCorner", fields: [graphicId], references: [id])
+  graphics  Graphic[]
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
 }
 
 model Materials {
-  id        String    @id @default(auto()) @map("_id") @db.ObjectId
+  id        Int       @id @default(autoincrement())
   name      String    @unique
   image     String
-  graphicId String[]  @db.ObjectId
-  graphics  Graphic[] @relation("GraphicToMaterial", fields: [graphicId], references: [id])
+  graphics  Graphic[]
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
 }
 
-enum Size {
-  large
-  small
-  meduim
-  extraLarge
-  doubleExtraLarge
-}
+// enum Size {
+//   large
+//   small
+//   meduim
+//   extraLarge
+//   doubleExtraLarge
+// }
 
 model LaptopOrder {
-  id        String   @id @default(auto()) @map("_id") @db.ObjectId
-  userId    String   @db.ObjectId
+  id        Int      @id @default(autoincrement())
+  userId    Int
   user      User     @relation("UserToLaptopOrder", fields: [userId], references: [id])
   name      String   @default("")
   email     String   @default("")
   phone     String   @default("")
   address   String   @default("")
-  laptopId  String[] @db.ObjectId
-  laptops   Laptop[] @relation(fields: [laptopId], references: [id])
+  laptops   Laptop[]
   isPaid    Boolean  @default(false)
   pricePaid Float
   createdAt DateTime @default(now())
@@ -151,15 +173,14 @@ model LaptopOrder {
 }
 
 model GraphicOrder {
-  id        String    @id @default(auto()) @map("_id") @db.ObjectId
-  userId    String    @db.ObjectId
+  id        Int       @id @default(autoincrement())
+  userId    Int
   user      User      @relation("UserToGraphicOrder", fields: [userId], references: [id])
   name      String    @default("")
   email     String    @default("")
   phone     String    @default("")
   address   String    @default("")
-  graphicId String[]  @db.ObjectId
-  graphics  Graphic[] @relation("GraphicToGraphicOrder", fields: [graphicId], references: [id])
+  graphics  Graphic[]
   isPaid    Boolean   @default(false)
   pricePaid Float
   createdAt DateTime  @default(now())

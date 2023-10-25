@@ -8,16 +8,16 @@ export async function middleware(req: NextRequest) {
         await verifyAuth(token)
     )
 
-    if(req.nextUrl.pathname.startsWith('/') && !verifiedToken) {
+    if(req.nextUrl.pathname.startsWith('/login') && !verifiedToken) {
         return
     }
 
-    if(req.url.includes("/") && verifiedToken) {
+    if(req.nextUrl.pathname.startsWith("/login") && verifiedToken) {
         return NextResponse.redirect(new URL('/dashboard', req.url))
     }
 
     if(!verifiedToken) {
-        return NextResponse.redirect(new URL('/', req.url))
+        return NextResponse.redirect(new URL('/login', req.url))
     }
 
     return NextResponse.next()

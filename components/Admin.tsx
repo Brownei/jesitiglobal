@@ -12,7 +12,6 @@ const Admin: FC<AdminProps> = ({session}) => {
     <>
         <h1 className="text-lg font-extrabold">{session.firstName} {session.lastName}</h1>
         <p>Welcome to the land of enterpeneurs!</p>
-        <Image src={session.image!} alt="Profile" width={100} height={100} priority/>
     </>
   )
 }

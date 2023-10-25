@@ -1,15 +1,17 @@
 "use client"
 import Image from "next/image"
 import Link from "next/link"
-import z from "zod"
+import z, { ZodError, ZodIssue } from "zod"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import axios, { AxiosError } from "axios"
 import { toast } from "sonner"
-import { User, useCurrentUsereStore, UserSchema } from "@/hooks/useUser"
+import { useUserStore, UserSchema, User } from "@/hooks/useUser"
+import { useState } from "react"
 
 const LoginForm = () => {
-    const {onChange} = useCurrentUsereStore()
+    // const [user, setUser] = useState<User | null>(null)
+    const {onChange} = useUserStore()
     const loginDataSchema = z.object({
         email: z.string().email("Put in a valid email address"),
         password: z.string().min(8, "Your password should be up to 8 characters")
@@ -22,12 +24,19 @@ const LoginForm = () => {
     } = useForm<loginData>({
         resolver: zodResolver(loginDataSchema)
     })
+
     async function login(data: loginData) {
         try {
-            const response = await axios.post('/api/auth/login', data)
-            const validatedData = UserSchema.parse(response)
-            toast.success('Successfully logged in')
-            onChange(validatedData)
+            const response = await axios.post('/api/auth/login', {
+                email: data.email,
+                password: data.password
+            })
+
+            if(response.status === 409 || response.status === 404) {
+                console.log(response.statusText)
+            } 
+
+            window.location.assign('/dashboard')
         } catch (error) {
             console.log(error)
             if(error instanceof AxiosError) {

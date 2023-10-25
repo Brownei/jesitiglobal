@@ -1,3 +1,4 @@
+import { AuthPayload } from "@/interfaces/auth";
 import { JWTPayload, jwtVerify } from "jose"
 
 function getJwtSecretKey() {
@@ -11,7 +12,7 @@ function getJwtSecretKey() {
 export const verifyAuth = async (token: string) => {
     try {
         const verified = await jwtVerify(token, new TextEncoder().encode(getJwtSecretKey()))
-        return verified.payload as JWTPayload
+        return verified.payload as AuthPayload
     } catch (error) {
         throw new Error('Your token has expired!')
     }

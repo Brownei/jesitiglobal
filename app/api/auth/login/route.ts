@@ -22,7 +22,7 @@ export async function POST(req: NextRequest, res: NextResponse) {
         })
         
         if (!foundUser) {
-            return NextResponse.json({ message: 'Unauthorized' }, {status: 409})
+            return NextResponse.json({ message: 'No user like this!' }, {status: 409})
         }
         
         const match = await compare(password, foundUser.password!)
@@ -32,16 +32,8 @@ export async function POST(req: NextRequest, res: NextResponse) {
         }
         const token = await new SignJWT(foundUser).setProtectedHeader({ alg }).setExpirationTime("24h").sign(signature)
     
-        const response =  NextResponse.json<User>({
+        const response =  NextResponse.json({
             id: foundUser.id,
-            firstName: foundUser.firstName!,
-            lastName: foundUser.lastName!,
-            email: foundUser.email!,
-            role: foundUser.role,
-            image: foundUser.image!,
-            emailVerified: foundUser.emailVerified!,
-            createdAt: foundUser.createdAt!,
-            updatedAt: foundUser.updatedAt!
         }, {status: 200});
 
         response.cookies.set({

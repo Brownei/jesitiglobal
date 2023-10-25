@@ -1,3 +1,5 @@
+import z from "zod";
+
 declare type Graphics = {
     id: string;
     name: string;
@@ -22,5 +24,3 @@ type Image = {
 type Size = {
     name: string
 }
-
-

@@ -1,9 +1,157 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+@import url('https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&display=swap');
 
+
+html, 
+body, 
 :root {
-  padding: 0;
-  margin: 0;
-  box-sizing: border-box;
+  height: 100%;
+}
+
+@font-face {
+  font-family: 'Futura Bold';
+  src: url('../fonts/FuturaNowHeadlineBold.ttf');
+  src: local('Futura Bold'), local('Futura Bold'),
+      url('../fonts/FuturaNowHeadlineBold.ttf') format('embedded-opentype'),
+      url('../fonts/FuturaNowHeadlineBold.ttf') format('woff2'),
+      url('../fonts/FuturaNowHeadlineBold.ttf') format('woff'),
+      url('../fonts/FuturaNowHeadlineBold.ttf') format('truetype');
+  font-weight: 600;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Futura ExtraBold';
+  src: url('../fonts/FuturaNowHeadlineExtraBold.ttf');
+  src: local('Futura ExtraBold'), local('Futura ExtraBold'),
+      url('../fonts/FuturaNowHeadlineExtraBold.ttf') format('embedded-opentype'),
+      url('../fonts/FuturaNowHeadlineExtraBold.ttf') format('woff2'),
+      url('../fonts/FuturaNowHeadlineExtraBold.ttf') format('woff'),
+      url('../fonts/FuturaNowHeadlineExtraBold.ttf') format('truetype');
+  font-weight: 600;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Futura Black';
+  src: url('../fonts/FuturaNowHeadlineBlack.ttf');
+  src: local('Futura Black'), local('Futura Black'),
+      url('../fonts/FuturaNowHeadlineBlack.ttf') format('embedded-opentype'),
+      url('../fonts/FuturaNowHeadlineBlack.ttf') format('woff2'),
+      url('../fonts/FuturaNowHeadlineBlack.ttf') format('woff'),
+      url('../fonts/FuturaNowHeadlineBlack.ttf') format('truetype');
+  font-weight: 600;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Futura ExtraBlack';
+  src: url('../fonts/FuturaNowHeadlineExtraBlack.ttf');
+  src: local('Futura ExtraBlack'), local('Futura ExtraBlack'),
+      url('../fonts/FuturaNowHeadlineExtraBlack.ttf') format('embedded-opentype'),
+      url('../fonts/FuturaNowHeadlineExtraBlack.ttf') format('woff2'),
+      url('../fonts/FuturaNowHeadlineExtraBlack.ttf') format('woff'),
+      url('../fonts/FuturaNowHeadlineExtraBlack.ttf') format('truetype');
+  font-weight: 900;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Helvetica';
+  src: url('../fonts/Helvetica.ttf');
+  src: local('Helvetica'), local('Helvetica'),
+      url('../fonts/Helvetica.ttf') format('embedded-opentype'),
+      url('../fonts/Helvetica.ttf') format('woff2'),
+      url('../fonts/Helvetica.ttf') format('woff'),
+      url('../fonts/Helvetica.ttf') format('truetype');
+  font-weight: 100;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Helvetica Bold';
+  src: url('../fonts/Helvetica-Bold.ttf');
+  src: local('Helvetica Bold'), local('Helvetica Bold'),
+      url('../fonts/Helvetica-Bold.ttf') format('embedded-opentype'),
+      url('../fonts/Helvetica-Bold.ttf') format('woff2'),
+      url('../fonts/Helvetica-Bold.ttf') format('woff'),
+      url('../fonts/Helvetica-Bold.ttf') format('truetype');
+  font-weight: 400;
+  font-display: swap;
+}
+
+ 
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 224 71.4% 4.1%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 224 71.4% 4.1%;
+ 
+    --popover: 0 0% 100%;
+    --popover-foreground: 224 71.4% 4.1%;
+ 
+    --primary: 220.9 39.3% 11%;
+    --primary-foreground: 210 20% 98%;
+ 
+    --secondary: 220 14.3% 95.9%;
+    --secondary-foreground: 220.9 39.3% 11%;
+ 
+    --muted: 220 14.3% 95.9%;
+    --muted-foreground: 220 8.9% 46.1%;
+ 
+    --accent: 220 14.3% 95.9%;
+    --accent-foreground: 220.9 39.3% 11%;
+ 
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 20% 98%;
+
+    --border: 220 13% 91%;
+    --input: 220 13% 91%;
+    --ring: 224 71.4% 4.1%;
+ 
+    --radius: 0.5rem;
+  }
+ 
+  .dark {
+    --background: 224 71.4% 4.1%;
+    --foreground: 210 20% 98%;
+ 
+    --card: 224 71.4% 4.1%;
+    --card-foreground: 210 20% 98%;
+ 
+    --popover: 224 71.4% 4.1%;
+    --popover-foreground: 210 20% 98%;
+ 
+    --primary: 210 20% 98%;
+    --primary-foreground: 220.9 39.3% 11%;
+ 
+    --secondary: 215 27.9% 16.9%;
+    --secondary-foreground: 210 20% 98%;
+ 
+    --muted: 215 27.9% 16.9%;
+    --muted-foreground: 217.9 10.6% 64.9%;
+ 
+    --accent: 215 27.9% 16.9%;
+    --accent-foreground: 210 20% 98%;
+ 
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 20% 98%;
+ 
+    --border: 215 27.9% 16.9%;
+    --input: 215 27.9% 16.9%;
+    --ring: 216 12.2% 83.9%;
+  }
+}
+ 
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
 }

@@ -1,45 +1,23 @@
 import redisClient from "@/lib/redis";
-import { NextApiRequest, NextApiResponse } from "next";
 import logger from "@/lib/logger";
 import { connectToDB } from "@/lib/database";
-import { NextResponse } from "next/server";
+import { NextResponse, NextRequest } from "next/server";
 import { prisma } from "@/lib/prisma";
-import { getServerSession } from "next-auth";
-import { authOptions } from "../../auth/[...nextauth]/authOptions";
+import { verifyAuth } from "@/lib/verifyAuth";
 
-export async function GET(req: NextApiRequest, { params }: { params: { laptopId: string } }) {
+export async function GET(req: NextRequest, { params }: { params: { laptopId: number } }) {
     const id = params.laptopId
-    const redisKey = `laptops-${id}`
     let result;
-
     try {
-        if(redisClient) {
-            logger.info('Cache Hit!');
-            const cachedResults = await redisClient.get(redisKey);
-            
-            if(cachedResults) {
-                result = JSON.parse(cachedResults);
-            } 
-        }
-
-        logger.info('Cache Miss!');
-        await connectToDB()
         const laptop = await prisma.laptop.findUnique({
             where: {
                 id
             }
         })
-
         if(!laptop) {
             return NextResponse.json({ message: "No such laptop found!"}, {status: 404})
         }
         result = laptop
-
-        if(redisClient) {
-            logger.info('Laptops are cached!');
-            await redisClient.set(redisKey, JSON.stringify(result),  "EX", 60 * 60 * 2);
-        }
-
         return NextResponse.json(result)
     } catch (error) {
         logger.error(error)
@@ -48,24 +26,26 @@ export async function GET(req: NextApiRequest, { params }: { params: { laptopId:
     }
 }
 
-export async function PATCH(req: NextApiRequest, { params }: { params: { laptopId: string } }) {
-    await connectToDB()
-    const session = await getServerSession(authOptions)
+export async function PATCH(req: NextRequest, { params }: { params: { laptopId: number } }) {
+    const token = req.cookies.get('user')?.value
+    const verifiedToken = token && (
+        await verifyAuth(token)
+    )
     const id = params.laptopId
-    const {name, quantity, brand, model, screenSize, RAM, price, image, storage, color} = req.body
+    const {name, quantity, brand, model, screenSize, RAM, price, images, storage, color} = await req.json()
 
-    if (!session) {
+    if (!verifiedToken) {
         return NextResponse.json({ message: "You must be logged in." }, { status: 401});
     }
     
     const owner = await prisma.user.findUnique({
         where: {
-            email: session.user.email!
+            email: verifiedToken.email!
         }
     })
 
-    if(owner?.role === 'EMPLOYEE' || owner?.role === 'CLIENT') {
-        return NextResponse.json({ message: "Only the owner can create a new product!" }, { status: 401});
+    if(owner?.role === 'CLIENT') {
+        return NextResponse.json({ message: "Only the owner/employee can update a product!" }, { status: 401});
     }
 
     try {
@@ -93,7 +73,9 @@ export async function PATCH(req: NextApiRequest, { params }: { params: { laptopI
                 RAM: RAM as string,
                 storage: storage as string,
                 price: price as number,
-                image: image.map((i: string) => (i)),
+                image: {
+                    create: images.map((image: string) => (image))
+                },
                 color: color as string,
                 userId: owner!.id
             }
@@ -109,23 +91,25 @@ export async function PATCH(req: NextApiRequest, { params }: { params: { laptopI
 }
 
 
-export async function DELETE(req: NextApiRequest, { params }: { params: { laptopId: string } }) {
-    await connectToDB()
-    const session = await getServerSession(authOptions)
+export async function DELETE(req: NextRequest, { params }: { params: { laptopId: number } }) {
+    const token = req.cookies.get('user')?.value
+    const verifiedToken = token && (
+        await verifyAuth(token)
+    )
     const id = params.laptopId
 
-    if (!session) {
+    if (!verifiedToken) {
         return NextResponse.json({ message: "You must be logged in." }, { status: 401});
     }
     
     const owner = await prisma.user.findUnique({
         where: {
-            email: session.user.email!
+            email: verifiedToken.email!
         }
     })
 
-    if(owner?.role === 'EMPLOYEE' || owner?.role === 'CLIENT') {
-        return NextResponse.json({ message: "Only the owner can create a new product!" }, { status: 401});
+    if(owner?.role === 'CLIENT') {
+        return NextResponse.json({ message: "Only the owner/employee can delete a product!" }, { status: 401});
     }
 
     try {
@@ -133,10 +117,20 @@ export async function DELETE(req: NextApiRequest, { params }: { params: { laptop
             where: {
                 userId: owner!.id,
                 id
+            }, include: {
+                image: true
             }
         })
         if(!existingLaptop) {
             return NextResponse.json({ message: "No such laptop found!"}, {status: 404})
+        }
+
+        for(const image of existingLaptop.image){
+            await prisma.image.delete({
+                where: {
+                    id: image.id
+                }
+            })
         }
 
         await prisma.laptop.delete({

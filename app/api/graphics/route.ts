@@ -1,38 +1,18 @@
 import { NextRequest, NextResponse } from "next/server";
-import { Graphics } from "@/interfaces/interfaces";
 import { MessageResponse } from "@/interfaces/MessageResponse";
 import { connectToDB } from "@/lib/database";
 import { getServerSession } from "next-auth/next"
-import { authOptions } from "../auth/[...nextauth]/authOptions";
 import { NextApiRequest, NextApiResponse } from "next";
 import { prisma } from "@/lib/prisma";
 import logger from "@/lib/logger";
 import redisClient from "@/lib/redis";
+import { verifyAuth } from "@/lib/verifyAuth";
 
 export async function GET(req: NextApiRequest, res: NextApiResponse) {
-    const redisKey = 'graphics'
     let results;
-
     try {
-        if(redisClient) {
-            logger.info('Cache Hit!');
-            const cachedResults = await redisClient.get(redisKey);
-            
-            if(cachedResults) {
-                results = JSON.parse(cachedResults);
-            } 
-        }
-
-        logger.info('Cache Miss!');
-        await connectToDB()
         const graphics = await prisma.graphic.findMany()
         results = graphics
-
-        if(redisClient) {
-            logger.info('Graphics are cached!');
-            await redisClient.set(redisKey, JSON.stringify(results),  "EX", 60 * 60 * 2);
-        }
-
         return NextResponse.json(results)
     } catch (error) {
         logger.error(error)
@@ -42,18 +22,20 @@ export async function GET(req: NextApiRequest, res: NextApiResponse) {
 }
 
 
-export async function POST(req: NextApiRequest, res: NextApiResponse) {
-    await connectToDB()
-    const session = await getServerSession(authOptions)
-    const {name, quantity, description, thickness, cornerId, materialId, price, image, size, color, laminationId, categoryId} = req.body
+export async function POST(req: NextRequest) {
+    const token = req.cookies.get('user')?.value
+    const {name, quantity, description, thickness, corners, materials, price, image, sizes, colors, laminations, categoryId} = await req.json()
+    const verifiedToken = token && (
+        await verifyAuth(token)
+    )
     
-    if (!session) {
+    if (!verifiedToken) {
         return NextResponse.json({ message: "You must be logged in." }, { status: 401});
     }
     
     const owner = await prisma.user.findUnique({
         where: {
-            email: session.user.email!
+            email: verifiedToken.email!
         }
     })
 
@@ -79,13 +61,23 @@ export async function POST(req: NextApiRequest, res: NextApiResponse) {
                 description: description as string,
                 quantity: quantity as number,
                 thickness: thickness as number,
-                cornerId: cornerId.map((corner: string) => (corner)),
-                material: materialId.map((material: string) => (material)),
+                material: {
+                    create: materials.map((material: string) => (material)),
+                },
+                corners: {
+                    create: corners.map((corner: string) => (corner))
+                },
                 price,
                 image: image.map((i: string) => (i)),
-                size: size.map((s: string) => (s)),
-                color,
-                lamination: laminationId.map((lamination: string) => (lamination)),
+                size: {
+                    create: sizes.map((s: string) => (s))
+                },
+                color: {
+                    create: colors.map((color: string) => (color))
+                },
+                lamination: {
+                    create: laminations.map((lamination: string) => (lamination)),
+                },
                 categoryId,
                 userId: owner!.id
             }

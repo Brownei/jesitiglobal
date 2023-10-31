@@ -6,12 +6,13 @@ import { blur, translate } from '../anim/Hamburger';
 import { HamburgerType, Links } from './Hamburger';
 
 type HamburgerBodyProps = {
+    setToggle: (value: React.SetStateAction<boolean>) => void;
     setSelectedLink: Dispatch<SetStateAction<HamburgerType>>;
     selectedLink: HamburgerType;
     links: Links[]
 }
 
-const HamburgerBody: FC<HamburgerBodyProps> = ({links, selectedLink, setSelectedLink}) => {
+const HamburgerBody: FC<HamburgerBodyProps> = ({links, selectedLink, setSelectedLink, setToggle}) => {
 
     const getChars = (word: string) => {
         let chars: any[] = [];
@@ -31,16 +32,15 @@ const HamburgerBody: FC<HamburgerBodyProps> = ({links, selectedLink, setSelected
     }
     
     return (
-        <div className='grid gap-1 text-[2rem] lg:max-w-[1200px] mt-[80px] lg:text-[5vw] lg:pl-[2vw]'>
+        <div className='flex flex-col justify-end items-center gap-1 text-[2rem] lg:max-w-[1200px] mt-[80px] lg:text-[5vw] lg:pl-[2vw] lg:flex-row lg:flex-wrap lg:justify-center'>
         {
             links.map( (link, index) => {
                 const { title, href } = link;
                 return (
-                    <Link key={`l_${index}`} href={href}>
+                    <Link key={`l_${index}`} href={href} onMouseDown={() => setToggle(prev => !prev)}>
                         <motion.p
-                        className='text-[#061439] overflow-hidden font-[32px] pr-[30px] pt-[10px] font-FuturaBold'
-                        onMouseOver={() => {setSelectedLink({isActive: true, index})}} 
-                        onMouseLeave={() => {setSelectedLink({isActive: false, index})}} 
+                        className='flex items-end text-[#061439] overflow-hidden font-[32px] pr-[30px] pt-[10px] font-FuturaBold uppercase'
+                        onMouseDown={() => {setSelectedLink({isActive: true, index})}} 
                         variants={blur} 
                         animate={selectedLink.isActive && selectedLink.index != index ? "open" : "closed"}>
                             {getChars(title)}

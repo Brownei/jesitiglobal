@@ -7,44 +7,44 @@ import { hashSync } from "bcrypt-ts";
 import { verifyAuth } from "@/lib/verifyAuth";
 import { User } from "@/hooks/useUser";
 
-export async function GET(req: NextRequest) {
-    const token = req.cookies.get('user')?.value
-    try {
-    const verifiedToken = token && (
-      await verifyAuth(token)
-    )
+// export async function GET(req: NextRequest) {
+//     const token = req.cookies.get('user')?.value
+//     try {
+//     const verifiedToken = token && (
+//       await verifyAuth(token)
+//     )
 
-    if (!verifiedToken) {
-        return NextResponse.json({ message: "You must be logged in." }, { status: 401});
-    }
+//     if (!verifiedToken) {
+//         return NextResponse.json({ message: "You must be logged in." }, { status: 401});
+//     }
 
-    const user = await prisma.user.findUnique({
-        where: {
-            id: verifiedToken.id
-        }
-    });
+//     const user = await prisma.user.findUnique({
+//         where: {
+//             id: verifiedToken.id
+//         }
+//     });
 
-    if (user) {
-      return NextResponse.json<User>({ 
-        id: user.id,
-        firstName: user.firstName as string,
-        lastName: user.lastName as string,
-        emailVerified: user.emailVerified,
-        email: user.email as string,
-        image: user.image as string,
-        role: user.role,
-        createdAt: user.createdAt,
-        updatedAt: user.updatedAt,
-       });
-    } else {
-        return NextResponse.json({ error: 'Invalid token' }, {status: 401});
-    }
-  } catch (error) {
-    logger.error(error)
-    console.log(error)
-    return NextResponse.json({ error: 'Invalid token' }, {status: 401});
-  }
-}
+//     if (user) {
+//       return NextResponse.json<User>({ 
+//         id: user.id,
+//         firstName: user.firstName as string,
+//         lastName: user.lastName as string,
+//         emailVerified: user.emailVerified,
+//         email: user.email as string,
+//         image: user.image as string,
+//         role: user.role,
+//         createdAt: user.createdAt,
+//         updatedAt: user.updatedAt,
+//        });
+//     } else {
+//         return NextResponse.json({ error: 'Invalid token' }, {status: 401});
+//     }
+//   } catch (error) {
+//     logger.error(error)
+//     console.log(error)
+//     return NextResponse.json({ error: 'Invalid token' }, {status: 401});
+//   }
+// }
 
 export async function POST(req: NextRequest) {
     const {firstName, lastName, email, password: pass} = await req.json()

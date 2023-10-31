@@ -22,7 +22,7 @@ const links: Links[] = [
     src: "home.png"
   },
   {
-    title: "Shop",
+    title: "Laptop Shop",
     href: "/shop",
     src: "shop.png"
   },
@@ -32,7 +32,7 @@ const links: Links[] = [
     src: "home.png"
   },
   {
-    title: "Lookbook",
+    title: "How can we help?",
     href: "/lookbook",
     src: "lookbook.png"
   },
@@ -40,18 +40,27 @@ const links: Links[] = [
     title: "Contact",
     href: "/contact",
     src: "contact.png"
+  },
+  {
+    title: "Sign Up",
+    href: "/contact",
+    src: "contact.png"
+  },
+  {
+    title: "Log In",
+    href: "/contact",
+    src: "contact.png"
   }
 ]
-const Hamburger = () => {
+const Hamburger = ({setToggle}: {setToggle: (value: React.SetStateAction<boolean>) => void
+}) => {
 
   const [selectedLink, setSelectedLink] = useState<HamburgerType>({isActive: false, index: 0});
 
   return (
     <motion.div variants={height} initial="initial" animate="enter" exit="exit" className='overflow-hidden'>
-      <div className='flex gap-[50px] justify-between mb-[80px] lg:mb-0'>
-        <div className='flex flex-col justify-end items-center'>
-          <HamburgerBody links={links} selectedLink={selectedLink} setSelectedLink={setSelectedLink}/>
-        </div>
+      <div className='flex flex-col justify-end items-center mb-[80px] lg:mb-0'>
+        <HamburgerBody setToggle={setToggle} links={links} selectedLink={selectedLink} setSelectedLink={setSelectedLink}/>
       </div>
     </motion.div>
   )

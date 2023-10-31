@@ -12,15 +12,19 @@ const Nav = () => {
   const NavItems = [
     {
       name: 'Laptop store',
-      href: '/'
+      href: '/laptop-store'
     },
     {
       name: 'Contact',
-      href: '/'
+      href: '/contact'
     },
     {
       name: 'About us',
-      href: '/'
+      href: '/about-us'
+    },
+    {
+      name: 'Graphic Designs Store',
+      href: '/graphics-store'
     },
   ]
   return (
@@ -42,7 +46,7 @@ const Nav = () => {
             <div className='w-6 h-0.5 mb-1 bg-gray-800 transition-transform' />
             <div className='w-6 h-0.5 bg-gray-800 transition-transform' />
           </motion.div>
-          <motion.div variants={opacity} animate={toggle ? 'open' : 'closed'} className='absolute opacity-0'>
+          <motion.div variants={opacity} animate={toggle ? 'open' : 'closed'} className='fixed opacity-0'>
             <div className="w-6 h-0.5 bg-gray-800 rotate-45 transition-transform"></div>
             <div className="w-6 h-0.5 bg-gray-800 -rotate-45 transition-transform"></div>
           </motion.div>
@@ -51,7 +55,7 @@ const Nav = () => {
 
       <div className='fixed top-0 w-full box-border px-[10px] z-30 bg-[#22AFFF]'>
         <AnimatePresence mode='wait'>
-          {toggle && <Hamburger />}
+          {toggle && <Hamburger setToggle={setToggle}/>}
         </AnimatePresence>
       </div>
     </nav>

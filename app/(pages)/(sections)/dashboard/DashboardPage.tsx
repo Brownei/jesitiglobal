@@ -5,12 +5,10 @@ import { useUserStore } from '@/hooks/useUser'
 import { useRouter } from 'next/navigation';
 
 const DashboardPage = () => {
-    const {refresh} = useRouter()
-    // const {currentUser, onChange, onRemove} = useUserStore();
-    const { data: currentUser, isError } = useUser()
+    const { currentUser } = useUserStore();
 
-    if(isError || !currentUser) {
-        refresh()
+    if(!currentUser) {
+        return <p>NO USER!</p>
     }
 
     if(currentUser?.role === 'OWNER') {

@@ -10,7 +10,6 @@ import { useUserStore, UserSchema, User } from "@/hooks/useUser"
 import { useState } from "react"
 
 const LoginForm = () => {
-    // const [user, setUser] = useState<User | null>(null)
     const {onChange} = useUserStore()
     const loginDataSchema = z.object({
         email: z.string().email("Put in a valid email address"),
@@ -32,11 +31,14 @@ const LoginForm = () => {
                 password: data.password
             })
 
-            if(response.status === 409 || response.status === 404) {
-                console.log(response.statusText)
-            } 
+            if(response.data) {
+                console.log(response.data)
+                onChange(response.data)
+                window.location.assign('/dashboard')
+            } else {
+                toast.error("Server error")
+            }
 
-            window.location.assign('/dashboard')
         } catch (error) {
             console.log(error)
             if(error instanceof AxiosError) {
@@ -80,7 +82,7 @@ const LoginForm = () => {
                     </div>
 
                     <div>
-                        <button disabled={isSubmitting} type="submit" className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 disabled:bg-gray-500">Log In</button>
+                        <button aria-disabled={isSubmitting} type="submit" className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 disabled:bg-gray-500">Log In</button>
                     </div>
                 </form>
             </div>

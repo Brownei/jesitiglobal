@@ -35,7 +35,7 @@ export async function POST(req: NextRequest) {
     
     const owner = await prisma.user.findUnique({
         where: {
-            email: verifiedToken.email!
+            email: verifiedToken.email as string
         }
     })
 

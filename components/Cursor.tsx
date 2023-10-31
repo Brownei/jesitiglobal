@@ -22,12 +22,25 @@ export default function CustomCursor() {
     mouse.y.set(clientY - cursorSize / 2);
   }
 
+  // const manageMouseEnter = (e: any) => {
+  //   const { clientX, clientY } = e;
+  //   mouse.x.set(clientX - cursorSize / 200);
+  //   mouse.y.set(clientY - cursorSize / 200);
+  // }
+
   useEffect( () => {
     window.addEventListener("mousemove", manageMouseMove);
     return () => {
       window.removeEventListener("mousemove", manageMouseMove)
     }
   }, [])
+
+  // useEffect(() => {
+  //   window.addEventListener("click", manageMouseEnter)
+  //   return () => {
+  //     window.addEventListener("click", manageMouseEnter)
+  //   }
+  // }, [])
 
   return (
     <div>
@@ -36,7 +49,7 @@ export default function CustomCursor() {
           left: smoothMouse.x, 
           top: smoothMouse.y,
         }} 
-        className='fixed w-[20px] h-[20px] cursor-none bg-[#96FDFF] rounded-[50%] pointer-events-none'>
+        className='fixed w-[25px] h-[25px] z-[999] cursor-none bg-[#96FDFF] rounded-[50%] pointer-events-none'>
       </motion.div>
     </div>
   )

@@ -16,17 +16,14 @@ export const height = {
 
 export const blur = {
     initial: {
-        filter: "blur(0px)",
-        opacity: 1
+        scale: 0.9
     },
     open: {
-        filter: "blur(4px)",
-        opacity: 0.6,
+        scale: 0.8,
         transition: {duration: 0.3}
     },
     closed: {
-        filter: "blur(0px)",
-        opacity: 1,
+        scale: 0.9,
         transition: {duration: 0.3}
 
     }

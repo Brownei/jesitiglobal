@@ -3,7 +3,6 @@ import { prisma } from "@/lib/prisma";
 import { compare } from "bcrypt-ts";
 import logger from "@/lib/logger";
 import { SignJWT } from "jose";
-import { User } from "@/hooks/useUser";
 
 export async function POST(req: NextRequest, res: NextResponse) {
     const {email, password} = await req.json()
@@ -15,7 +14,7 @@ export async function POST(req: NextRequest, res: NextResponse) {
             return NextResponse.json({ message: 'All fields are required' }, {status: 404})
         }
         
-        const foundUser = await prisma.user.findFirst({
+        const foundUser = await prisma.user.findUnique({
             where: {
                 email
             }
@@ -30,10 +29,16 @@ export async function POST(req: NextRequest, res: NextResponse) {
         if (!match) {
             return NextResponse.json({ message: 'Password incorrect!' }, {status: 409})
         }
+        
         const token = await new SignJWT(foundUser).setProtectedHeader({ alg }).setExpirationTime("24h").sign(signature)
     
         const response =  NextResponse.json({
             id: foundUser.id,
+            firstName: foundUser.firstName,
+            lastName: foundUser.lastName,
+            email: foundUser.email,
+            image: foundUser.image,
+            role: foundUser.role
         }, {status: 200});
 
         response.cookies.set({

@@ -3,8 +3,7 @@ import './globals.css'
 import type { Metadata } from 'next'
 import ClientProvider from '@/provider/ClientProvider'
 import CustomCursor from '@/components/Cursor'
-import Banner from '@/components/Banner'
-import Nav from '@/components/Nav'
+
 
 export const metadata: Metadata = {
   title: 'JEsitiGlobal',
@@ -19,8 +18,6 @@ export default function RootLayout({
   return (
     <html>
       <body>
-        <Banner />
-        <Nav />
         <CustomCursor />
         <ClientProvider>
           <Toaster richColors/>

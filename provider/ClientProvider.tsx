@@ -3,6 +3,7 @@ import { FC, ReactNode, useState } from 'react'
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import Lenis from '@studio-freight/lenis'
+import { Toaster } from 'sonner'
 
 type ClientProviderProps = {
   children: ReactNode
@@ -30,6 +31,7 @@ const ClientProvider: FC<ClientProviderProps> = ({children}) => {
     <main>
       <QueryClientProvider client={queryClient}>
           {children}
+          <Toaster position="bottom-right" richColors/>
           <ReactQueryDevtools initialIsOpen={false} />
       </QueryClientProvider>
     </main>

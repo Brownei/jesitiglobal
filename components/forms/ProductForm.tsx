@@ -6,6 +6,8 @@ import { nanoid } from 'nanoid'
 import { Input } from "../ui/input";
 import { Textarea } from "../ui/textarea";
 import { Label } from "../ui/label";
+import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue, } from '../ui/select';
+
 
 type Image ={
     url: string
@@ -17,24 +19,32 @@ type ProductFormProps = {
 }
 
 const ProductForm: FC<ProductFormProps> = ({title}) => {
-    const [image, setImage] = useState<Image[]>([{ id: "", url: ""}])
+    const [image, setImage] = useState<Image[]>([])
 
 
   return (
-    <main>
-        <div className="relative mt-5 mr-5">
+    <main className="container">
+        <div className="relative mt-5 mr-5 rounded-full">
             <div className="flex justify-between items-center">
                 <h1 className="text-[2rem] font-HelveticaBold">{title}</h1>
-                
             </div>
             <div className="border-b border-black mt-2 mx-2" />
 
-            <div className="mt-5">
+            <div className="mt-5 mb-10">
                 {/* Basic Info */}
-                <div className="border p-4 rounded-lg w-full">
+                <div className="border p-4 rounded-lg w-full mb-[100px]">
                     <h3 className="mb-5">Basic Information</h3>
                     
                     <div className="grid gap-5">
+
+                         {/* IMAGES */}
+                        <div className="grid gap-1">
+                            <Label>Add Images</Label>
+                            <ImageUpload values={image} onRemove={url => setImage(image.filter((i) => i.id !== url))} onChange={url => setImage([...image, {
+                                id: nanoid(),
+                                url
+                            }])} />
+                        </div>
 
                         {/* NAME */}
                         <div className="grid gap-1">
@@ -43,28 +53,33 @@ const ProductForm: FC<ProductFormProps> = ({title}) => {
                         </div>
 
                         {/* CATEGORY, QUANTITY AND PRICE */}
-                        <div className="grid grid-cols-3 gap-5">
+                        <div className="flex flex-col gap-5 lg:grid lg:grid-cols-3">
                             <div className="grid gap-1">
                                 <Label>Category</Label>
-                                <input type="text" className="border outline-none" />
+                                <Select>
+                                    <SelectTrigger className="w-full">
+                                        <SelectValue placeholder="Select a category" />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        <SelectGroup>
+                                        <SelectLabel>Fruits</SelectLabel>
+                                        <SelectItem value="apple">Apple</SelectItem>
+                                        <SelectItem value="banana">Banana</SelectItem>
+                                        <SelectItem value="blueberry">Blueberry</SelectItem>
+                                        <SelectItem value="grapes">Grapes</SelectItem>
+                                        <SelectItem value="pineapple">Pineapple</SelectItem>
+                                        </SelectGroup>
+                                    </SelectContent>
+                                </Select>
                             </div>
                             <div className="grid gap-1">
                                 <Label>Quantity</Label>
-                                <Input type="number" className="border outline-none" placeholder="Enter the name...."/>
+                                <Input type="number" className="border outline-none" placeholder="Enter the quantity avialable...."/>
                             </div>
                             <div className="grid gap-1">
                                 <Label>Price</Label>
-                                <Input type="number" className="border outline-none" placeholder="Enter the name...."/>
+                                <Input type="number" className="border outline-none" placeholder="Enter the price...."/>
                             </div>
-                        </div>
-
-                        {/* IMAGES */}
-                        <div className="grid gap-1">
-                            <Label>Images</Label>
-                            <ImageUpload values={image} onRemove={url => setImage(image.filter((i) => i.id !== url))} onChange={url => setImage([...image, {
-                                id: nanoid(),
-                                url
-                            }])} />
                         </div>
 
                         {/* DESCRIPTION */}
@@ -74,30 +89,100 @@ const ProductForm: FC<ProductFormProps> = ({title}) => {
                         </div>
 
                         {/* CORNERS, MATERIALS AND SIZE */}
-                        <div className="grid grid-cols-3 gap-5">
+                        <div className="flex flex-col gap-5 lg:grid lg:grid-cols-3">
                             <div className="grid gap-1">
                                 <Label>Corners</Label>
-                                <Input type="text" className="border outline-none" />
+                                <Select>
+                                    <SelectTrigger className="w-full">
+                                        <SelectValue placeholder="Select a corner" />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        <SelectGroup>
+                                        <SelectLabel>Fruits</SelectLabel>
+                                        <SelectItem value="apple">Apple</SelectItem>
+                                        <SelectItem value="banana">Banana</SelectItem>
+                                        <SelectItem value="blueberry">Blueberry</SelectItem>
+                                        <SelectItem value="grapes">Grapes</SelectItem>
+                                        <SelectItem value="pineapple">Pineapple</SelectItem>
+                                        </SelectGroup>
+                                    </SelectContent>
+                                </Select>
                             </div>
                             <div className="grid gap-1">
                                 <Label>Material</Label>
-                                <Input type="number" className="border outline-none" placeholder="Enter the name...."/>
+                                <Select>
+                                    <SelectTrigger className="w-full">
+                                        <SelectValue placeholder="Select a material" />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        <SelectGroup>
+                                        <SelectLabel>Fruits</SelectLabel>
+                                        <SelectItem value="apple">Apple</SelectItem>
+                                        <SelectItem value="banana">Banana</SelectItem>
+                                        <SelectItem value="blueberry">Blueberry</SelectItem>
+                                        <SelectItem value="grapes">Grapes</SelectItem>
+                                        <SelectItem value="pineapple">Pineapple</SelectItem>
+                                        </SelectGroup>
+                                    </SelectContent>
+                                </Select>
                             </div>
                             <div className="grid gap-1">
                                 <Label>Size</Label>
-                                <Input type="number" className="border outline-none" placeholder="Enter the name...."/>
+                                <Select>
+                                    <SelectTrigger className="w-full">
+                                        <SelectValue placeholder="Select a size" />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        <SelectGroup>
+                                        <SelectLabel>Fruits</SelectLabel>
+                                        <SelectItem value="apple">Apple</SelectItem>
+                                        <SelectItem value="banana">Banana</SelectItem>
+                                        <SelectItem value="blueberry">Blueberry</SelectItem>
+                                        <SelectItem value="grapes">Grapes</SelectItem>
+                                        <SelectItem value="pineapple">Pineapple</SelectItem>
+                                        </SelectGroup>
+                                    </SelectContent>
+                                </Select>
                             </div>
                         </div>
 
                         {/* COLOR AND LAMINATION */}
-                        <div className="grid grid-cols-3 gap-5">
+                        <div className="flex flex-col gap-5 lg:grid lg:grid-cols-3">
                             <div className="grid gap-1">
                                 <Label>Color</Label>
-                                <Input type="text" className="border outline-none" />
+                                <Select>
+                                    <SelectTrigger className="w-full">
+                                        <SelectValue placeholder="Select a color" />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        <SelectGroup>
+                                        <SelectLabel>Fruits</SelectLabel>
+                                        <SelectItem value="apple">Apple</SelectItem>
+                                        <SelectItem value="banana">Banana</SelectItem>
+                                        <SelectItem value="blueberry">Blueberry</SelectItem>
+                                        <SelectItem value="grapes">Grapes</SelectItem>
+                                        <SelectItem value="pineapple">Pineapple</SelectItem>
+                                        </SelectGroup>
+                                    </SelectContent>
+                                </Select>
                             </div>
                             <div className="grid gap-1">
                                 <Label>Lamination</Label>
-                                <Input type="number" className="border outline-none" placeholder="Enter the name...."/>
+                                <Select>
+                                    <SelectTrigger className="w-full">
+                                        <SelectValue placeholder="Select a lamination" />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        <SelectGroup>
+                                        <SelectLabel>Fruits</SelectLabel>
+                                        <SelectItem value="apple">Apple</SelectItem>
+                                        <SelectItem value="banana">Banana</SelectItem>
+                                        <SelectItem value="blueberry">Blueberry</SelectItem>
+                                        <SelectItem value="grapes">Grapes</SelectItem>
+                                        <SelectItem value="pineapple">Pineapple</SelectItem>
+                                        </SelectGroup>
+                                    </SelectContent>
+                                </Select>
                             </div>
                         </div>
                     </div>

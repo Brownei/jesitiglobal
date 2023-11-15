@@ -6,13 +6,12 @@ import { TrashIcon, ImageIcon } from '@radix-ui/react-icons';
 
 type image = {
     url: string;
-    id: string
 }
 
 interface ImageUploadProps {
     disabled?: boolean;
     onChange: (value: string) => void;
-    onRemove: (value: string) => void;
+    onRemove: (value: number | string) => void;
     values?: image[] | undefined;
     value?: string | undefined
 }
@@ -33,10 +32,10 @@ return (
         <div className="mb-4 flex items-center gap-4">
             {values!.length > 0 ? (
                 <div className='flex flex-wrap items-center gap-3'>
-                    {values!.map((url) => (
-                        <div key={url.id} className="relative w-[200px] h-[200px] rounded-md overflow-hidden">
+                    {values!.map((url, index) => (
+                        <div key={index} className="relative w-[200px] h-[200px] rounded-md overflow-hidden">
                             <div className="z-10 absolute top-2 right-2">
-                                <Button type="button" onClick={() => onRemove(url.id)} variant="destructive" size="sm">
+                                <Button type="button" onClick={() => onRemove(index)} variant="destructive" size="sm">
                                     <TrashIcon className="h-4 w-4" />
                                 </Button>
                             </div>

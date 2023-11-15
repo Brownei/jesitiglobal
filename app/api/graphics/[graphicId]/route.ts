@@ -1,13 +1,10 @@
 import redisClient from "@/lib/redis";
-import { NextApiRequest, NextApiResponse } from "next";
 import logger from "@/lib/logger";
-import { connectToDB } from "@/lib/database";
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
-import { getServerSession } from "next-auth";
 import { verifyAuth } from "@/lib/verifyAuth";
 
-export async function GET(req: NextApiRequest, { params }: { params: { graphicId: number } }) {
+export async function GET(req: NextRequest, res: NextResponse, { params }: { params: { graphicId: number } }) {
     const id = params.graphicId
     let result;
 
@@ -29,7 +26,7 @@ export async function GET(req: NextApiRequest, { params }: { params: { graphicId
     }
 }
 
-export async function PATCH(req: NextRequest, { params }: { params: { graphicId: number } }) {
+export async function PATCH(req: NextRequest, res: NextResponse, { params }: { params: { graphicId: number } }) {
     const id = params.graphicId
     const {name, quantity, description, thickness, corners, materials, price, image, sizes, colors, laminations, categoryId} = await req.json()
     const token = req.cookies.get('user')?.value
@@ -43,7 +40,7 @@ export async function PATCH(req: NextRequest, { params }: { params: { graphicId:
     
     const owner = await prisma.user.findUnique({
         where: {
-            email: verifiedToken.email!
+            email: verifiedToken.email as string
         }
     })
 
@@ -109,7 +106,7 @@ export async function PATCH(req: NextRequest, { params }: { params: { graphicId:
 }
 
 
-export async function DELETE(req: NextRequest, { params }: { params: { graphicId: number } }) {
+export async function DELETE(req: NextRequest, res: NextResponse, { params }: { params: { graphicId: number } }) {
     const id = params.graphicId
     const token = req.cookies.get('user')?.value
     const verifiedToken = token && (
@@ -122,7 +119,7 @@ export async function DELETE(req: NextRequest, { params }: { params: { graphicId
     
     const owner = await prisma.user.findUnique({
         where: {
-            email: verifiedToken.email!
+            email: verifiedToken.email as string
         }
     })
 
@@ -146,7 +143,7 @@ export async function DELETE(req: NextRequest, { params }: { params: { graphicId
         for(const image of existingGraphic.image) {
             await prisma.image.delete({
                 where: {
-                   id: image.id 
+                    id: image.id 
                 }
             })
         }

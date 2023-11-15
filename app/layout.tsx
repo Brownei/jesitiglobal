@@ -2,7 +2,6 @@ import { Toaster } from 'sonner'
 import './globals.css'
 import type { Metadata } from 'next'
 import ClientProvider from '@/provider/ClientProvider'
-import CustomCursor from '@/components/Cursor'
 
 
 export const metadata: Metadata = {
@@ -18,7 +17,6 @@ export default function RootLayout({
   return (
     <html>
       <body>
-        <CustomCursor />
         <ClientProvider>
           <Toaster richColors/>
           {children}

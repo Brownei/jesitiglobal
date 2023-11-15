@@ -17,7 +17,6 @@ const ClientProvider: FC<ClientProviderProps> = ({children}) => {
   //SCROLL-TRIGGER AND SMOOTH SCROLL INTEGRATION
   const lenis = new Lenis()
   lenis.on('scroll', (e: any) => {
-    console.log(e)
   })
       
   function raf(time: any) {

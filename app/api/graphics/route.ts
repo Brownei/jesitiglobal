@@ -1,14 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
-import { MessageResponse } from "@/interfaces/MessageResponse";
-import { connectToDB } from "@/lib/database";
-import { getServerSession } from "next-auth/next"
-import { NextApiRequest, NextApiResponse } from "next";
 import { prisma } from "@/lib/prisma";
 import logger from "@/lib/logger";
-import redisClient from "@/lib/redis";
 import { verifyAuth } from "@/lib/verifyAuth";
 
-export async function GET(req: NextApiRequest, res: NextApiResponse) {
+export async function GET(req: NextRequest, res: NextResponse) {
     let results;
     try {
         const graphics = await prisma.graphic.findMany()
@@ -22,7 +17,7 @@ export async function GET(req: NextApiRequest, res: NextApiResponse) {
 }
 
 
-export async function POST(req: NextRequest) {
+export async function POST(req: NextRequest, res: NextResponse) {
     const token = req.cookies.get('user')?.value
     const {name, quantity, description, thickness, corners, materials, price, image, sizes, colors, laminations, categoryId} = await req.json()
     const verifiedToken = token && (

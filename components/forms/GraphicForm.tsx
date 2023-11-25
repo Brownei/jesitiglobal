@@ -1,12 +1,10 @@
 "use client"
 import { FC, useState } from "react"
-import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod"
-import { useForm, Controller, ControllerRenderProps } from "react-hook-form"
+import { useForm, Controller, ControllerRenderProps,  } from "react-hook-form"
 import { useRouter } from "next/navigation";
 import { Button } from "../ui/button";
 import ImageUpload from "../ImageUpload";
-import { nanoid } from 'nanoid'
 import { Input } from "../ui/input";
 import { Textarea } from "../ui/textarea";
 import { ArrowLeftIcon } from "@radix-ui/react-icons";
@@ -16,11 +14,6 @@ import { createNewGraphics } from "@/actions/server-actions";
 import { useCategories } from "@/actions/queries/get-categories";
 import { Graphics, graphicSchema } from "@/interfaces/interface";
 import { Category } from "@prisma/client";
-
-type Image ={
-    url: string
-    id: string
-}
 
 type GraphicFormProps = {
     title: string;
@@ -54,22 +47,15 @@ const GraphicForm: FC<GraphicFormProps> = ({title, initialData}) => {
         defaultValues
     })
 
-
-    function onSizeSelect(field: ControllerRenderProps<Graphics, 'categoryId'>, _id: number) {
-        if(isSelected.includes(_id)) {
-            setIsSelected(isSelected.filter(i => i !== _id));
-            field.onChange((e: Category[]) => {
-                e.filter(i => i.id !== _id)
-            })
+    function onSelectCategories(name: string, field: ControllerRenderProps<Graphics, 'corners'>) {
+        if(field.value.includes(name)) {
+            field.onChange(field.value.filter(i => i.name !== name))
         } else {
-            setIsSelected([...isSelected, _id])
-            field.onChange([field.value, _id])
+            field.onChange([...field.value, { name }])
         }
-
         console.log(field.value)
     }
-    
-    
+
 
   return (
     <main>
@@ -126,11 +112,11 @@ const GraphicForm: FC<GraphicFormProps> = ({title, initialData}) => {
                                     <div className="grid gap-1">
                                         <Label>Category</Label>
                                         <div className='flex items-center gap-3'>
-                                            {categories?.map((size) => (
+                                            {/* {categories?.map((size) => (
                                                 <div key={size.id}>
-                                                    <p onMouseDown={() => onSizeSelect(field, size.id)} className={isSelected.includes(size.id) ? 'border-2 border-black bg-white h-10 w-10 rounded-full grid justify-center items-center cursor-pointer font-ProBold' : 'h-10 w-10 rounded-full bg-white grid justify-center items-center cursor-pointer font-ProBold'}>{size.name}</p>
+                                                    <p onMouseDown={() => onSelectCategories(size.id, field )} className={isSelected.includes(size.id) ? 'border-2 border-black bg-white h-10 w-10 rounded-full grid justify-center items-center cursor-pointer font-ProBold' : 'h-10 w-10 rounded-full bg-white grid justify-center items-center cursor-pointer font-ProBold'}>{size.name}</p>
                                                 </div>
-                                            ))}
+                                            ))} */}
                                         </div>
                                     </div>
                                 )}
@@ -179,13 +165,13 @@ const GraphicForm: FC<GraphicFormProps> = ({title, initialData}) => {
                                 render={({field}) => (
                                     <div className="grid gap-1">
                                         <Label>Corners</Label>
-                                        {/* <div className='flex items-center gap-3'>
+                                        <div className='flex items-center gap-3'>
                                             {categories?.map((size) => (
                                                 <div key={size.id}>
-                                                    <p onMouseDown={() => onSizeSelect(field, size.id)} className={isSelected.includes(size.id) ? 'border-2 border-black bg-white h-10 w-10 rounded-full grid justify-center items-center cursor-pointer font-ProBold' : 'h-10 w-10 rounded-full bg-white grid justify-center items-center cursor-pointer font-ProBold'}>{size.value}</p>
+                                                    <p {...field} onClick={() => onSelectCategories(size.name, field)} className={field.value.includes(size.name) ? 'border-2 border-black bg-white h-10 w-10 rounded-full grid justify-center items-center cursor-pointer font-ProBold' : 'h-10 w-10 rounded-full bg-white grid justify-center items-center cursor-pointer font-ProBold'}>{size.name}</p>
                                                 </div>
                                             ))}
-                                        </div> */}
+                                        </div>
                                     </div>
                                 )}
                                 />

@@ -47,14 +47,14 @@ const GraphicForm: FC<GraphicFormProps> = ({title, initialData}) => {
         defaultValues
     })
 
-    function onSelectCategories(name: string, field: ControllerRenderProps<Graphics, 'corners'>) {
-        if(field.value.includes(name)) {
-            field.onChange(field.value.filter(i => i.name !== name))
-        } else {
-            field.onChange([...field.value, { name }])
-        }
-        console.log(field.value)
-    }
+    // function onSelectCategories(name: string, field: ControllerRenderProps<Graphics, 'corners'>) {
+    //     if(field.value.includes(name)) {
+    //         field.onChange(field.value.filter(i => i.name !== name))
+    //     } else {
+    //         field.onChange([...field.value, { name }])
+    //     }
+    //     console.log(field.value)
+    // }
 
 
   return (
@@ -166,11 +166,11 @@ const GraphicForm: FC<GraphicFormProps> = ({title, initialData}) => {
                                     <div className="grid gap-1">
                                         <Label>Corners</Label>
                                         <div className='flex items-center gap-3'>
-                                            {categories?.map((size) => (
+                                            {/* {categories?.map((size) => (
                                                 <div key={size.id}>
                                                     <p {...field} onClick={() => onSelectCategories(size.name, field)} className={field.value.includes(size.name) ? 'border-2 border-black bg-white h-10 w-10 rounded-full grid justify-center items-center cursor-pointer font-ProBold' : 'h-10 w-10 rounded-full bg-white grid justify-center items-center cursor-pointer font-ProBold'}>{size.name}</p>
                                                 </div>
-                                            ))}
+                                            ))} */}
                                         </div>
                                     </div>
                                 )}

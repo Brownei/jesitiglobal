@@ -23,6 +23,7 @@ model User {
   email         String?        @unique
   emailVerified DateTime?
   password      String?
+  hasAccess     Boolean?       @default(false)
   image         String?
   role          Roles          @default(CLIENT)
   laptops       Laptop[]       @relation("UserToLaptop")

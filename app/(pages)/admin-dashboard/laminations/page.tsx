@@ -11,7 +11,7 @@ const LaminationsPage = async () => {
           <h1 className="text-[2rem] uppercase font-HelveticaBold">Laminations ({laminations.length})</h1>
         </div>
         <div className="border-b border-black mt-2 mx-2" />
-        <ClientPage dataItem={laminations} column={laminationColumns} header='New Lamination' navigation="laminations" navigationParam="create-laminations"/>
+        <ClientPage isThereNewTitle={true} dataItem={laminations} column={laminationColumns} header='New Lamination' navigation="laminations" navigationParam="create-laminations"/>
       </div>
     </main>
   )

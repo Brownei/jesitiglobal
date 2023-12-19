@@ -1,8 +1,11 @@
+import CornerForm from '@/components/forms/CornerForm'
 import React from 'react'
 
 const CreateNewCornersPage = () => {
   return (
-    <div>CreateNewCornersPage</div>
+    <main>
+      <CornerForm title="Create a new corner"/>
+    </main>
   )
 }
 

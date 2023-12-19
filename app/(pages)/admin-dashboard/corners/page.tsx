@@ -12,7 +12,7 @@ const CornersPage = async () => {
           <h1 className="text-[2rem] uppercase font-HelveticaBold">Corners ({corners.length})</h1>
         </div>
         <div className="border-b border-black mt-2 mx-2" />
-        <ClientPage dataItem={corners} column={cornerColumns} header='New Corner' navigation="corners" navigationParam="create-corners"/>
+        <ClientPage isThereNewTitle={true} dataItem={corners} column={cornerColumns} header='New Corner' navigation="corners" navigationParam="create-corners"/>
       </div>
     </main>
   )

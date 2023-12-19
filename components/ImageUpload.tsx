@@ -12,8 +12,8 @@ interface ImageUploadProps {
     disabled?: boolean;
     onChange: (value: string) => void;
     onRemove: (value: number | string) => void;
-    values?: image[] | undefined;
-    value?: string | undefined
+    values: string[];
+    value?: string
 }
 
 const ImageUpload: React.FC<ImageUploadProps> = ({
@@ -21,7 +21,6 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
     onChange,
     onRemove,
     values,
-    value
 }) => {
 const onUpload = (result: any) => {
     onChange(result.info.secure_url);
@@ -29,71 +28,42 @@ const onUpload = (result: any) => {
 
 return ( 
     <div>
-        <div className="mb-4 flex items-center gap-4">
-            {values!.length > 0 ? (
-                <div className='flex flex-wrap items-center gap-3'>
-                    {values!.map((url, index) => (
-                        <div key={index} className="relative w-[200px] h-[200px] rounded-md overflow-hidden">
-                            <div className="z-10 absolute top-2 right-2">
-                                <Button type="button" onClick={() => onRemove(index)} variant="destructive" size="sm">
-                                    <TrashIcon className="h-4 w-4" />
-                                </Button>
-                            </div>
-                            <Image
-                                fill
-                                className="object-cover"
-                                alt="Image"
-                                src={url.url}
-                            />
-                        </div>
-                    ))}
-                    <div>
-                        <CldUploadWidget onUpload={onUpload} uploadPreset="ds7qvybc">
-                            {({ open }) => {
-                                const onClick = () => {
-                                    open();
-                                };
+      <div className="mb-4 flex items-center gap-4">
+        {values.map((url: string) => (
+          <div key={url} className="relative w-[200px] h-[200px] rounded-md overflow-hidden">
+            <div className="z-10 absolute top-2 right-2">
+              <Button type="button" onClick={() => onRemove(url)} variant="destructive" size="sm">
+                <TrashIcon className="h-4 w-4" />
+              </Button>
+            </div>
+            <Image
+              fill
+              className="object-cover"
+              alt="Image"
+              src={url}
+            />
+          </div>
+        ))}
+      </div>
+      <CldUploadWidget onUpload={onUpload} uploadPreset="ds7qvybc">
+        {({ open }) => {
+          const onClick = () => {
+            open();
+          };
 
-                                return (
-                                    <Button 
-                                    type="button" 
-                                    aria-disabled={disabled} 
-                                    variant="secondary" 
-                                    onClick={onClick}
-                                    >
-                                        <ImageIcon className="h-4 w-4 mr-2" />
-                                        Upload an Image
-                                    </Button>
-                                );
-                            }}
-                        </CldUploadWidget>
-                    </div>
-                </div>
-            ) : (
-                <div>
-                    <CldUploadWidget onUpload={onUpload} uploadPreset="ds7qvybc">
-                            {({ open }) => {
-                            const onClick = () => {
-                                open();
-                            };
-
-                            return (
-                                <Button 
-                                className='lg:w-[500px] lg:h-[300px]'
-                                type="button" 
-                                aria-disabled={disabled} 
-                                variant="secondary" 
-                                onClick={onClick}
-                                >
-                                <ImageIcon className="h-4 w-4 mr-2" />
-                                Upload an Image
-                                </Button>
-                            );
-                            }}
-                    </CldUploadWidget>
-                </div>
-            )}
-        </div>
+          return (
+            <Button 
+              type="button" 
+              disabled={disabled} 
+              variant="secondary" 
+              onClick={onClick}
+            >
+              <ImageIcon className="h-4 w-4 mr-2" />
+              Upload an Image
+            </Button>
+          );
+        }}
+      </CldUploadWidget>
     </div>
 );
 }

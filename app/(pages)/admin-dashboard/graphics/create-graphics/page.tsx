@@ -3,9 +3,7 @@ import GraphicForm from "@/components/forms/GraphicForm"
 const CreateNewProductPage = () => {
   return (
     <main>
-        <div>
-            <GraphicForm title="Create a new graphic"/>
-        </div>
+      <GraphicForm title="Create a new graphic"/>
     </main>
   )
 }

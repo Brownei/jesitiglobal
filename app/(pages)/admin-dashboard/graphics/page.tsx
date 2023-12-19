@@ -12,7 +12,7 @@ const ProductPage = async () => {
           <h1 className="text-[2rem] uppercase font-HelveticaBold">Graphics ({graphics.length})</h1>
         </div>
         <div className="border-b border-black mt-2 mx-2" />
-        <ClientPage dataItem={graphics} column={graphicColumns} header='New Graphic' navigation='graphics' navigationParam='create-graphics'/>
+        <ClientPage isThereNewTitle={true} dataItem={graphics} column={graphicColumns} header='New Graphic' navigation='graphics' navigationParam='create-graphics'/>
       </div>
     </main>
   )

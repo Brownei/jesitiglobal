@@ -1,8 +1,10 @@
-import React from 'react'
+import ColorForm from "@/components/forms/ColorForm"
 
 const CreateNewColorsPage = () => {
   return (
-    <div>CreateNewColorsPage</div>
+    <main>
+      <ColorForm title="Create a new color"/>
+    </main>
   )
 }
 

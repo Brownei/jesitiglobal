@@ -1,8 +1,11 @@
-import React from 'react'
+import MaterialForm from "@/components/forms/MaterialForm"
+
 
 const CreateNewMaterialsPage = () => {
   return (
-    <div>CreateNewMaterialsPage</div>
+    <main>
+      <MaterialForm title="Create a new material"/>
+    </main>
   )
 }
 

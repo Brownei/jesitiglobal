@@ -11,10 +11,10 @@ const ColorsPage = async () => {
           <h1 className="text-[2rem] uppercase font-HelveticaBold">Colors ({colors.length})</h1>
         </div>
         <div className="border-b border-black mt-2 mx-2" />
-        <ClientPage dataItem={colors} column={colorColumns} header='New Color' navigation='colors' navigationParam='create-colors'/>
+        <ClientPage isThereNewTitle={true} dataItem={colors} column={colorColumns} header='New Color' navigation='colors' navigationParam='create-colors'/>
       </div>
     </main>
   )
 }
 
-export default ColorsPage
+export default ColorsPage;

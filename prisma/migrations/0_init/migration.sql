@@ -6,6 +6,7 @@ CREATE TABLE `User` (
     `email` VARCHAR(191) NULL,
     `emailVerified` DATETIME(3) NULL,
     `password` VARCHAR(191) NULL,
+    `hasAccess` BOOLEAN NULL DEFAULT false,
     `image` VARCHAR(191) NULL,
     `role` ENUM('OWNER', 'EMPLOYEE', 'CLIENT') NOT NULL DEFAULT 'CLIENT',
     `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),

@@ -1,8 +1,10 @@
-import React from 'react'
+import CategoryForm from "@/components/forms/CategoryForm"
 
 const CreateNewCategoriesPage = () => {
   return (
-    <div>CreateNewCategoriesPage</div>
+    <main>
+      <CategoryForm title='Create a new category'/>
+    </main>
   )
 }
 

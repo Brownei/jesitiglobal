@@ -4,7 +4,7 @@ import axios, { AxiosError } from 'axios'
 import {toast} from 'sonner'
 import {zodResolver} from '@hookform/resolvers/zod'
 import {z} from 'zod';
-import { User, useCurrentUsereStore } from '@/hooks/useUser'
+import { User } from '@/hooks/useUser'
 import { useRouter } from 'next/navigation'
 import {SubmitHandler, useForm} from 'react-hook-form'
 import Image from 'next/image'

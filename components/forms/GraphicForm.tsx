@@ -1,7 +1,7 @@
 "use client"
 import { FC, useState } from "react"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { useForm, Controller, ControllerRenderProps,  } from "react-hook-form"
+import { useForm, Controller } from "react-hook-form"
 import { useRouter } from "next/navigation";
 import { Button } from "../ui/button";
 import ImageUpload from "../ImageUpload";
@@ -13,11 +13,10 @@ import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrig
 import { createNewGraphics } from "@/actions/server-actions";
 import { useCategories } from "@/actions/queries/get-categories";
 import { Graphics, graphicSchema } from "@/interfaces/interface";
-import { Category } from "@prisma/client";
 
 type GraphicFormProps = {
     title: string;
-    initialData: Graphics;
+    initialData?: Graphics;
 }
 
 const GraphicForm: FC<GraphicFormProps> = ({title, initialData}) => {
@@ -42,7 +41,7 @@ const GraphicForm: FC<GraphicFormProps> = ({title, initialData}) => {
         laminations: [],
         colors: []
     }
-    const { control, handleSubmit, formState: {errors, isSubmitting}} = useForm<Graphics>({
+    const { control, handleSubmit, formState: {errors, isSubmitting}, reset} = useForm<Graphics>({
         resolver: zodResolver(graphicSchema),
         defaultValues
     })
@@ -63,7 +62,7 @@ const GraphicForm: FC<GraphicFormProps> = ({title, initialData}) => {
             <div className="flex flex-row-reverse justify-between items-center">
                 <Button 
                 variant='outline'
-                onClick={() => router.back()}
+                onClick={() => router.push('/admin-dashboard/graphics')}
                 className='text-sm flex gap-1 font-ProMedium w-fit'>
                     <ArrowLeftIcon/>
                     Back
@@ -86,7 +85,7 @@ const GraphicForm: FC<GraphicFormProps> = ({title, initialData}) => {
                             render={({field}) => (
                                 <div className="grid gap-1">
                                     <Label>Add Images</Label>
-                                    <ImageUpload values={field.value} onRemove={(url) => field.onChange([...field.value.filter((current) => current.url !== url)])} onChange={(url) => field.onChange([...field.value, { url }])} />
+                                    <ImageUpload values={field.value.map((v) => v.url)} onRemove={(url) => field.onChange([...field.value.filter((current) => current.url !== url)])} onChange={(url) => field.onChange([...field.value, { url }])} />
                                 </div>
                             )}
                             />
@@ -263,11 +262,11 @@ const GraphicForm: FC<GraphicFormProps> = ({title, initialData}) => {
                         </div>
 
                         <div className="flex mt-5 justify-end items-center gap-3">
-                            <Button className="text-center w-fit hover:text-[#061439] duration-300 font-bold" variant='outline'>
+                            <Button onClick={() => reset()} className="text-center w-fit hover:text-[#061439] duration-300 font-bold" variant='outline'>
                                 Cancel
                             </Button>
                             <Button className="text-center w-fit hover:bg-[#96FDFF] hover:text-[#061439] duration-300 font-bold">
-                                Save
+                                {isSubmitting ? 'Creating...' : 'Create'}
                             </Button>
                         </div>
                     </form>

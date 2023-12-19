@@ -1,8 +1,10 @@
-import React from 'react'
+import SizeForm from '@/components/forms/SizeForm'
 
 const CreateNewSizesPage = () => {
   return (
-    <div>CreateNewSizesPage</div>
+    <main>
+      <SizeForm title='Create a new size'/>
+    </main>
   )
 }
 

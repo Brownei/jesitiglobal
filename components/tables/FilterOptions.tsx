@@ -14,16 +14,18 @@ import { useRouter } from "next/navigation"
 
 interface ProductFilterOptionsProps<TData> {
     table: Table<TData>
-    newTitle: string;
+    newTitle?: string;
     navigation: string;
-    navigationParam: string;
+    navigationParam?: string;
+    isThereNewTitle?: boolean;
 }
 
 export function FilterOptions<TData>({
   table,
   newTitle,
   navigation,
-  navigationParam
+  navigationParam,
+  isThereNewTitle
 }: ProductFilterOptionsProps<TData>) {
   const router = useRouter()
   return (
@@ -61,12 +63,14 @@ export function FilterOptions<TData>({
               )
             })}
         </DropdownMenuContent>
-        <div>
+        {isThereNewTitle === true && (
+          <div>
           <Button className="ml-auto h-8 flex font-ProExtraBold" variant='outline' size='sm' onClick={() => router.push(`/admin-dashboard/${navigation}/${navigationParam}`)}>
             <PlusCircledIcon className="mr-2 h-4 w-4"/>
             {newTitle}
           </Button>
         </div>
+        )}
       </DropdownMenu>
     </div>
   )

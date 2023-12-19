@@ -18,9 +18,6 @@ export const categoryColumns: ColumnDef<CategoryColumn>[] = [
   {
     accessorKey: "description",
     header: "Description",
-    cell: (info: any) => (
-      <div style={{maxWidth: '200px'}} />
-    ),
   },
   {
     accessorKey: "createdAt",

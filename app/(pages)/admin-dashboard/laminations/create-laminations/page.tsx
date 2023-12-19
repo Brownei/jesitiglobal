@@ -1,8 +1,10 @@
-import React from 'react'
+import LaminationForm from '@/components/forms/LaminationForm'
 
 const CreateNewLaminationsPage = () => {
   return (
-    <div>CreateNewLaminationsPage</div>
+    <main>
+      <LaminationForm title="Create a new lamination"/>
+    </main>
   )
 }
 

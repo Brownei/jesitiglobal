@@ -1,6 +1,26 @@
 import {z} from "zod";
 
 
+//USERS 
+const roles = ["Client", "Employee", "Owner"] as const;
+export const userSchema = z.object({
+    firstName: z.string().min(5, 'Your first name should be more than 5 characters.').max(50, 'Your first name should be less than 50 characters.'),
+    lastName: z.string().min(5, 'Your last name should be more than 5 characters.').max(50, 'Your last name should be less than 50 characters.'),
+    email: z.string(),
+    image: z.string(),
+    role: z.enum(roles)
+})
+export type Users = z.infer<typeof userSchema>
+
+
+//CATEGORIES
+export const categorySchema = z.object({
+    name: z.string().min(5, 'The name of your category should be more than 5 characters.').max(50, 'The name of your product should be more than 5 characters.'),
+    description: z.string()
+})
+export type Categories = z.infer<typeof categorySchema>
+
+
 //CORNERS
 export const cornerSchema = z.object({
     name: z.string().min(5, 'The name of your corners should be more than 5 characters.').max(50, 'The name of your product should be more than 5 characters.'),
@@ -43,7 +63,7 @@ export type Sizes = z.infer<typeof sizeSchema>
 //LAMINATIONS
 export const laminationSchema = z.object({
     name: z.string().min(5, 'The name of your laminations should be more than 5 characters.').max(50, 'The name of your product should be more than 5 characters.'),
-    image: z.string()
+    image: z.string().min(1)
 })
 export type Laminations = z.infer<typeof laminationSchema>
 
@@ -64,3 +84,19 @@ export const graphicSchema = z.object({
     categoryId: z.string(),
 })
 export type Graphics = z.infer<typeof graphicSchema>
+
+
+//LAPTOPS
+export const laptopSchema = z.object({
+    name: z.string().min(5, 'The name of your laptop should be more than 5 characters.').max(100, 'The name of your product should be more than 5 characters.'),
+    brand: z.string().min(10, 'The name of your product should be more than 10 characters.'),
+    quantity: z.number(),
+    model: z.string(),
+    screenSize: z.number(),
+    RAM: z.string(),
+    storage: z.string(),
+    color: z.string(),
+    price: z.number(),
+    images: z.array(imageSchema),
+})
+export type Laptops = z.infer<typeof laptopSchema>

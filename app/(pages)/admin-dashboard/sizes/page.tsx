@@ -11,7 +11,7 @@ const SizesPage = async () => {
           <h1 className="text-[2rem] uppercase font-HelveticaBold">Sizes ({sizes.length})</h1>
         </div>
         <div className="border-b border-black mt-2 mx-2" />
-        <ClientPage dataItem={sizes} column={sizeColumns} header='New Size' navigation="sizes" navigationParam="create-sizes"/>
+        <ClientPage isThereNewTitle={true} dataItem={sizes} column={sizeColumns} header='New Size' navigation="sizes" navigationParam="create-sizes"/>
       </div>
     </main>
   )

@@ -22,12 +22,13 @@ import { DataTablePagination } from "./DataTablePagination";
 type DataTableTypes = {
   dataItem : any[]
   columns: ColumnDef<any>[]
-  newTitle: string;
+  newTitle?: string;
   navigation: string;
-  navigationParam: string;
+  navigationParam?: string;
+  isThereNewTitle?: boolean
 }
 
-export const DataTable: React.FC<DataTableTypes> = ({dataItem, columns, newTitle, navigation, navigationParam}) => {
+export const DataTable: React.FC<DataTableTypes> = ({dataItem, columns, newTitle, navigation, navigationParam, isThereNewTitle}) => {
   const [rowSelection, setRowSelection] = useState({})
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({})
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
@@ -57,8 +58,8 @@ export const DataTable: React.FC<DataTableTypes> = ({dataItem, columns, newTitle
   })
 
   return (
-    <div className="space-y-4 font-ProBold">
-      <FilterForm table={table} filterOptions={<FilterOptions newTitle={newTitle} table={table} navigation={navigation} navigationParam={navigationParam}/>}/>
+    <div className="space-y-4 font-Helvetica">
+      <FilterForm table={table} filterOptions={<FilterOptions isThereNewTitle={isThereNewTitle} newTitle={newTitle} table={table} navigation={navigation} navigationParam={navigationParam}/>}/>
       <div className="rounded-md border">
         <Table>
           <TableHeader>

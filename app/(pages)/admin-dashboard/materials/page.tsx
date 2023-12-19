@@ -12,7 +12,7 @@ const MaterialsPage = async () => {
           <h1 className="text-[2rem] uppercase font-HelveticaBold">Materials ({materials.length})</h1>
         </div>
         <div className="border-b border-black mt-2 mx-2" />
-        <ClientPage dataItem={materials} column={materialColumns} header='New Material' navigation="materials" navigationParam="create-materials"/>
+        <ClientPage isThereNewTitle={true} dataItem={materials} column={materialColumns} header='New Material' navigation="materials" navigationParam="create-materials"/>
       </div>
     </main>
   )

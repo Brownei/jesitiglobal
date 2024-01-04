@@ -1,19 +1,22 @@
 "use client"
 
-import { Categories } from "@/interfaces/interface";
-import { ChangeEvent, FC, useCallback, useState, useMemo, useEffect } from "react"
+import { Categories, Users } from "@/interfaces/interface";
+import { ChangeEvent, FC, useCallback, useState, useMemo, useEffect, SyntheticEvent } from "react"
 import { useSearchParams, usePathname, useRouter } from "next/navigation";
 import { Button } from "../ui/button";
 import { Label } from "../ui/label";
 import { Input } from "../ui/input";
 import { ArrowLeftIcon } from "@radix-ui/react-icons";
+import { toast } from "sonner";
+import axios, { AxiosError } from "axios";
 
 type CategoryFormProps = {
     title: string;
-    initialData?: Categories
+    initialData?: Categories;
+    currentUser: Users
 }
 
-const CategoryForm: FC<CategoryFormProps> = ({title, initialData}) => {
+const CategoryForm: FC<CategoryFormProps> = ({title, initialData, currentUser}) => {
     const [onLoading, setOnLoading] = useState(false)
     const [name, setName] = useState(initialData ? initialData.name : '')
     const [description, setDescription] = useState(initialData ? initialData.description : '')
@@ -71,8 +74,31 @@ const CategoryForm: FC<CategoryFormProps> = ({title, initialData}) => {
         saveToQuery()
     }, [pathname, query, router])
 
-    function onSubmit() {
-        console.log('Hrjrjrhht')
+    async function onSubmit(e: SyntheticEvent) {
+        e.preventDefault()
+        setOnLoading(true)
+
+        try {
+            const response = await axios.post('/api/categories', {
+                name,
+                description,
+                userId: currentUser.id
+            })
+            if(response.status !== 200) {
+                toast.error('Something happened!')
+            }
+
+            setOnLoading(false)
+            toast.success(`${name} is created successfully!`)
+            window.location.assign('/admin-dashboard/categories')
+        } catch (error) {
+            console.log(error)
+            if(error instanceof AxiosError) {
+                toast.error(error.response?.data)
+            }
+        } finally {
+            setOnLoading(false)
+        }
     }
 
 

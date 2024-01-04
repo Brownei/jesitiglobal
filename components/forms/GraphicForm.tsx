@@ -1,7 +1,7 @@
 "use client"
 import { FC, useState } from "react"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { useForm, Controller } from "react-hook-form"
+import { useForm, Controller, SubmitHandler } from "react-hook-form"
 import { useRouter } from "next/navigation";
 import { Button } from "../ui/button";
 import ImageUpload from "../ImageUpload";
@@ -10,16 +10,17 @@ import { Textarea } from "../ui/textarea";
 import { ArrowLeftIcon } from "@radix-ui/react-icons";
 import { Label } from "../ui/label";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue, } from '../ui/select';
-import { createNewGraphics } from "@/actions/server-actions";
+import { createNewGraphic } from "@/actions/server-actions";
 import { useCategories } from "@/actions/queries/get-categories";
-import { Graphics, graphicSchema } from "@/interfaces/interface";
+import { Graphics, graphicSchema, Users } from "@/interfaces/interface";
 
 type GraphicFormProps = {
     title: string;
     initialData?: Graphics;
+    currentUser?: Users
 }
 
-const GraphicForm: FC<GraphicFormProps> = ({title, initialData}) => {
+const GraphicForm: FC<GraphicFormProps> = ({title, initialData, currentUser}) => {
     const {data: categories, isError} = useCategories()
     const [isSelected, setIsSelected] =useState<number[]>([])
     const router = useRouter()
@@ -27,6 +28,8 @@ const GraphicForm: FC<GraphicFormProps> = ({title, initialData}) => {
     const defaultValues = initialData ? {
         ...initialData,
         price: parseFloat(String(initialData?.price)),
+        quantity: parseFloat(String(initialData.quantity)),
+        thickness: parseFloat(String(initialData.thickness))
     } : {
         name: '',
         description: '',
@@ -55,6 +58,10 @@ const GraphicForm: FC<GraphicFormProps> = ({title, initialData}) => {
     //     console.log(field.value)
     // }
 
+    const submit: SubmitHandler<Graphics> = async (data) => {
+        console.log(data)
+    }
+
 
   return (
     <main>
@@ -76,7 +83,7 @@ const GraphicForm: FC<GraphicFormProps> = ({title, initialData}) => {
                 <div className="border p-4 rounded-lg w-full mb-[100px]">
                     <h3 className="mb-5">Basic Information</h3>
                     
-                    <form onSubmit={handleSubmit(createNewGraphics)}>
+                    <form onSubmit={handleSubmit(createNewGraphic)}>
                         <div className="grid gap-5">
                             {/* IMAGES */}
                             <Controller 
@@ -261,7 +268,7 @@ const GraphicForm: FC<GraphicFormProps> = ({title, initialData}) => {
                             </div>
                         </div>
 
-                        <div className="flex mt-5 justify-end items-center gap-3">
+                        <div className="flex mt-5 justify-end items-center gap-3 lg:mt-[120px]">
                             <Button onClick={() => reset()} className="text-center w-fit hover:text-[#061439] duration-300 font-bold" variant='outline'>
                                 Cancel
                             </Button>

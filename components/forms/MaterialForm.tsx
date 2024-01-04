@@ -5,17 +5,19 @@ import { useRouter } from "next/navigation";
 import { Label } from "../ui/label";
 import { Input } from "../ui/input";
 import { FC, useEffect } from "react";
-import { Materials, materialSchema } from "@/interfaces/interface";
+import { Materials, materialSchema, Users } from "@/interfaces/interface";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import ImageUpload from "../ImageUpload";
+import { createNewMaterial } from "@/actions/server-actions";
 
 type MaterialFormProps = {
     title: string;
     initialData?: Materials;
+    currentUser?: Users
 }
 
-const MaterialForm: FC<MaterialFormProps> = ({title, initialData}) => {
+const MaterialForm: FC<MaterialFormProps> = ({title, initialData, currentUser}) => {
     const router = useRouter()
     const defaultValues = initialData ? {
         ...initialData,
@@ -46,7 +48,7 @@ const MaterialForm: FC<MaterialFormProps> = ({title, initialData}) => {
 
                 <div className="mt-5 mb-10">
                 <div className="border p-4 rounded-lg w-full mb-[100px]">
-                    <form onSubmit={() => console.log('jdhhf')}>
+                    <form onSubmit={handleSubmit(createNewMaterial)}>
                         <div className="grid gap-5">
                             <Controller 
                             name="image"

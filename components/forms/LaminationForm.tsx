@@ -5,15 +5,16 @@ import { Button } from "../ui/button"
 import { FC, useEffect } from "react"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm, Controller } from "react-hook-form"
-import { createNewColor } from "@/actions/server-actions";
+import { createNewLamination } from "@/actions/server-actions";
 import ImageUpload from "../ImageUpload"
 import { Label } from "../ui/label"
 import { Input } from "../ui/input"
-import { Laminations, laminationSchema } from "@/interfaces/interface"
+import { Laminations, laminationSchema, Users } from "@/interfaces/interface"
 
 type LaminationFormProps = {
     title: string;
     initialData?: any;
+    currentUser?: Users
 }
 
 type image = {
@@ -21,7 +22,7 @@ type image = {
 }
 
 
-const LaminationForm: FC<LaminationFormProps> = ({title, initialData}) => {
+const LaminationForm: FC<LaminationFormProps> = ({title, initialData, currentUser}) => {
     const router = useRouter()
     const defaultValues = initialData ? {
         ...initialData,
@@ -51,7 +52,7 @@ const LaminationForm: FC<LaminationFormProps> = ({title, initialData}) => {
 
             <div className="mt-5 mb-10">
                 <div className="border p-4 rounded-lg w-full mb-[100px]">
-                    <form onSubmit={() => console.log('jdhhf')}>
+                    <form onSubmit={handleSubmit(createNewLamination)}>
                         <div className="grid gap-5">
                             <Controller 
                             name="image"

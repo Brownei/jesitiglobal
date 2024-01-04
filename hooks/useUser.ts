@@ -1,35 +1,31 @@
 "use client"
 import { create } from 'zustand';
-import {z} from 'zod'
+import { Users } from '@/interfaces/interface';
 
-
-export const UserSchema = z.object({
-    id: z.number(),
-    firstName: z.string().min(5, "The name of this user needs to be more than 5 characters"),
-    lastName: z.string().min(5, "The name of this user needs to be more than 5 characters"),
-    email: z.string().email(),
-    image: z.string().nullable(),
-    role: z.enum(["OWNER", "EMPLOYEE", "CLIENT"]),
-})
-
-export type User = z.infer<typeof UserSchema>
-
-
-type State = {
-    currentUser: User | null;
-}
-
-type Action = {
-    onChange: (user: User) => void;
+interface useUserStoreProps {
+    currentUser: Users | null;
+    onChange: (user: Users) => void;
     onRemove: () => void
 }
 
-export const useUserStore = create<State & Action>((set) => ({
+export const useUserStore = create<useUserStoreProps>((set) => ({
     currentUser: null,
-    onChange: (user) => {
-        set({currentUser: user})
-    },
-    onRemove: () => {
-        set({currentUser: null})
-    }
+    onChange: (user) => set(() => ({ currentUser: user })),
+    onRemove: () => set(() => ({currentUser: null})),
+}))
+
+
+//LOADING STATE STORE
+type LoadingState = {
+    Loading: boolean;
+}
+type LoadingAction = {
+    onLoading: () => void
+    notLoading: () => void
+}
+
+export const useLoadingStore = create<LoadingState & LoadingAction>((set) => ({
+    Loading: false,
+    onLoading: () => set({ Loading: true }),
+    notLoading: () => set({ Loading: false })
 }))

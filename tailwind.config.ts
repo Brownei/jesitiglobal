@@ -17,14 +17,11 @@ const config: Config = {
     },
     extend: {
       fontFamily: {
-        FuturaBlack: 'Futura Black',
-        FuturaExtraBlack: 'Futura ExtraBlack',
-        FuturaBold: 'Futura Bold',
-        FuturaExtraBold: 'Futura ExtraBold',
-        Futura: 'Futura',
-        Helvetica: 'Helvetica',
-        HelveticaBold: 'Helvetica Bold',
-        Oswald: 'Oswald'
+        FamiljenBold: 'Familjen Grotesk Bold',
+        FamiljenItalic: 'Familjen Grotesk Italic',
+        Poppins: 'Poppins',
+        PoppinsBold: 'Poppins Bold',
+        PoppinsLight: 'Poppins Light'
       },
       backgroundImage: {
         'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',

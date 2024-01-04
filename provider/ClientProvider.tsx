@@ -1,5 +1,5 @@
 "use client"
-import { FC, ReactNode, useState } from 'react'
+import { FC, ReactNode, useLayoutEffect, useRef, useState } from 'react'
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import Lenis from '@studio-freight/lenis'
@@ -15,16 +15,16 @@ const ClientProvider: FC<ClientProviderProps> = ({children}) => {
   }))
 
   //SCROLL-TRIGGER AND SMOOTH SCROLL INTEGRATION
-  const lenis = new Lenis()
-  lenis.on('scroll', (e: any) => {
-  })
-      
-  function raf(time: any) {
-    lenis.raf(time)
-    requestAnimationFrame(raf)
-  }
-      
-  requestAnimationFrame(raf)
+  useLayoutEffect( () => {
+    const lenis = new Lenis()
+
+    const raf = (time: any) => {
+      lenis.raf(time)
+      requestAnimationFrame(raf)
+    }
+
+    requestAnimationFrame(raf);
+  }, [])
 
   return (
     <main>

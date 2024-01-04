@@ -2,7 +2,9 @@ import redisClient from "@/lib/redis";
 import logger from "@/lib/logger";
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
-import { verifyAuth } from "@/lib/verifyAuth";
+import { getServerSession } from "next-auth";
+import { authOptions } from "../../auth/[...nextauth]/options";
+
 
 export async function GET(req: NextRequest, res: NextResponse, { params }: { params: { laminationId: number } }) {
     const id = params.laminationId
@@ -15,37 +17,36 @@ export async function GET(req: NextRequest, res: NextResponse, { params }: { par
             }
         })
         if(!lamination) {
-            return NextResponse.json({ message: "No such lamination found!"}, {status: 404})
+            return new NextResponse("No such lamination found!", {status: 404})
         }
         result = lamination
         return NextResponse.json(result)
     } catch (error) {
         logger.error(error)
         console.log(error)
-        return NextResponse.json({ message: "Internal Server Error" }, {status: 500})
+        return new NextResponse("Internal server error", {status: 500})
     }
 }
 
 export async function PATCH(req: NextRequest, res: NextResponse, { params }: { params: { laminationId: number } }) {
     const id = params.laminationId
     const {name, image} = await req.json()
-    const token = req.cookies.get('user')?.value
-    const verifiedToken = token && (
-        await verifyAuth(token)
-    )
+    const verifiedToken = await getServerSession(authOptions)
 
     if (!verifiedToken) {
-        return NextResponse.json({ message: "You must be logged in." }, { status: 401});
+        return new NextResponse("Unauthorized!", { status: 401});
     }
     
     const owner = await prisma.user.findUnique({
         where: {
-            email: verifiedToken.email as string
+            email: verifiedToken.user?.email as string
         }
     })
 
     if(owner?.role === 'CLIENT') {
-        return NextResponse.json({ message: "Only the owner/employee can update." }, { status: 401});
+        return new NextResponse("Unauthorized!", { status: 401});
+    } else if (owner?.role === 'EMPLOYEE' && owner.hasAccess === false) {
+        return new NextResponse("Unauthorized!", { status: 401});
     }
 
     try {
@@ -56,10 +57,10 @@ export async function PATCH(req: NextRequest, res: NextResponse, { params }: { p
         })
 
         if(!existingLamination) {
-            return NextResponse.json({ message: "No such lamination found."}, {status: 404})
+            return new NextResponse("No such lamination found.", {status: 404})
         }
 
-        const updateLamination = await prisma.lamination.update({
+        await prisma.lamination.update({
             where: {
                 id
             }, 
@@ -69,11 +70,11 @@ export async function PATCH(req: NextRequest, res: NextResponse, { params }: { p
             }
         })
         logger.info('New lamination updated.')
-        return NextResponse.json(updateLamination, {status: 201})
+        return new NextResponse(`${name} is updated!`, {status: 200})
     } catch (error) {
         logger.error(error)
         console.log(error)
-        return NextResponse.json({ message: "Internal Server Error" }, {status: 500})
+        return new NextResponse("Internal server error", {status: 500})
     }
 
 }
@@ -81,23 +82,22 @@ export async function PATCH(req: NextRequest, res: NextResponse, { params }: { p
 
 export async function DELETE(req: NextRequest, res: NextResponse, { params }: { params: { laminationId: number } }) {
     const id = params.laminationId
-    const token = req.cookies.get('user')?.value
-    const verifiedToken = token && (
-        await verifyAuth(token)
-    )
+    const verifiedToken = await getServerSession(authOptions)
 
     if (!verifiedToken) {
-        return NextResponse.json({ message: "You must be logged in." }, { status: 401});
+        return new NextResponse("Unauthorized!", { status: 401});
     }
     
     const owner = await prisma.user.findUnique({
         where: {
-            email: verifiedToken.email as string
+            email: verifiedToken.user?.email as string
         }
     })
 
     if(owner?.role === 'CLIENT') {
-        return NextResponse.json({ message: "Only the owner/employee can delete." }, { status: 401});
+        return new NextResponse("Unauthorized!", { status: 401});
+    } else if (owner?.role === 'EMPLOYEE' && owner.hasAccess === false) {
+        return new NextResponse("Unauthorized!", { status: 401});
     }
 
     try {
@@ -107,7 +107,7 @@ export async function DELETE(req: NextRequest, res: NextResponse, { params }: { 
             }
         })
         if(!existingLamination) {
-            return NextResponse.json({ message: "No such lamination found!"}, {status: 404})
+            return new NextResponse("No such lamination found!", {status: 404})
         }
 
         await prisma.lamination.delete({
@@ -116,11 +116,11 @@ export async function DELETE(req: NextRequest, res: NextResponse, { params }: { 
             }
         })
 
-        return NextResponse.json({ message: `${existingLamination.name} is successfully deleted!`})
+        return new NextResponse(`${existingLamination.name} is successfully deleted!`, { status: 200 })
 
     } catch (error) {
         logger.error(error)
         console.log(error)
-        return NextResponse.json({ message: "Internal Server Error" }, {status: 500})
+        return new NextResponse("Internal server error", {status: 500})
     }
 }

@@ -1,7 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import logger from "@/lib/logger";
-import { verifyAuth } from "@/lib/verifyAuth";
+import { getServerSession } from "next-auth";
+import { authOptions } from "../auth/[...nextauth]/options";
+
 
 export async function GET(req: NextRequest, res: NextResponse) {
     let results;
@@ -12,30 +14,29 @@ export async function GET(req: NextRequest, res: NextResponse) {
     } catch (error) {
         logger.error(error)
         console.log(error)
-        return NextResponse.json({ message: "Internal Server Error" }, {status: 500})
+        return new NextResponse("Internal server error", {status: 500})
     }
 }
 
 
 export async function POST(req: NextRequest, res: NextResponse) {
-    const token = req.cookies.get('user')?.value
     const {name, quantity, description, thickness, corners, materials, price, image, sizes, colors, laminations, categoryId} = await req.json()
-    const verifiedToken = token && (
-        await verifyAuth(token)
-    )
+    const verifiedToken = await getServerSession(authOptions)
     
     if (!verifiedToken) {
-        return NextResponse.json({ message: "You must be logged in." }, { status: 401});
+        return new NextResponse("Unauthorized!", { status: 401});
     }
     
     const owner = await prisma.user.findUnique({
         where: {
-            email: verifiedToken.email as string
+            email: verifiedToken.user?.email as string
         }
     })
 
-    if(owner?.role === 'EMPLOYEE' || owner?.role === 'CLIENT') {
-        return NextResponse.json({ message: "Only the owner can create a new product!" }, { status: 401});
+    if(owner?.role === 'CLIENT') {
+        return new NextResponse("Unauthorized!", { status: 401});
+    } else if (owner?.role === 'EMPLOYEE' && owner.hasAccess === false) {
+        return new NextResponse("Unauthorized!", { status: 401});
     }
 
     try {
@@ -47,10 +48,10 @@ export async function POST(req: NextRequest, res: NextResponse) {
         })
 
         if(existingGraphic) {
-            return NextResponse.json({ message: "Existing graphic! Try adding another"}, {status: 409})
+            return new NextResponse("Existing graphic!", {status: 409})
         }
 
-        const newGraphics = await prisma.graphic.create({
+        await prisma.graphic.create({
             data: {
                 name: name as string,
                 description: description as string,
@@ -77,11 +78,12 @@ export async function POST(req: NextRequest, res: NextResponse) {
                 userId: owner!.id
             }
         })
+
         logger.info('New graphics created!')
-        return NextResponse.json(newGraphics, {status: 201})
+        return new NextResponse(`${name} is created!`, {status: 201})
     } catch (error) {
         logger.error(error)
         console.log(error)
-        return NextResponse.json({ message: "Internal Server Error" }, {status: 500})
+        return new NextResponse("Internal server error", {status: 500})
     }
 }

@@ -1,6 +1,7 @@
 import SizeForm from '@/components/forms/SizeForm'
 
-const CreateNewSizesPage = () => {
+const CreateNewSizesPage = async () => {
+
   return (
     <main>
       <SizeForm title='Create a new size'/>

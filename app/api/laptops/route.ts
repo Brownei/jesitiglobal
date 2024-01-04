@@ -1,10 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
-import { connectToDB } from "@/lib/database";
-import { getServerSession } from "next-auth/next"
 import { prisma } from "@/lib/prisma";
 import logger from "@/lib/logger";
-import redisClient from "@/lib/redis";
-import { verifyAuth } from "@/lib/verifyAuth";
+import { getServerSession } from "next-auth";
+import { authOptions } from "../auth/[...nextauth]/options";
+
 
 export async function GET(req: NextRequest) {
     let results;
@@ -22,9 +21,7 @@ export async function GET(req: NextRequest) {
 
 // export async function POST(req: NextRequest) {
 //     const token = req.cookies.get('user')?.value
-//     const verifiedToken = token && (
-//         await verifyAuth(token)
-//     )
+//     const verifiedToken = await getServerSession(authOptions)
 //     const {name, quantity, brand, model, screenSize, RAM, price, images, storage, color} = await req.json()
     
 //     if (!verifiedToken) {
@@ -33,7 +30,7 @@ export async function GET(req: NextRequest) {
     
 //     const owner = await prisma.user.findUnique({
 //         where: {
-//             email: verifiedToken.email!
+//             email: verifiedToken.user?.email!
 //         }
 //     })
 

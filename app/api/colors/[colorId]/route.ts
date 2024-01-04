@@ -2,7 +2,9 @@ import redisClient from "@/lib/redis";
 import logger from "@/lib/logger";
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
-import { verifyAuth } from "@/lib/verifyAuth";
+import { getServerSession } from "next-auth";
+import { authOptions } from "../../auth/[...nextauth]/options";
+
 
 export async function GET(req: NextRequest, res: NextResponse, { params }: { params: { colorId: number } }) {
     const id = params.colorId
@@ -15,37 +17,37 @@ export async function GET(req: NextRequest, res: NextResponse, { params }: { par
             }
         })
         if(!color) {
-            return NextResponse.json({ message: "No such color found!"}, {status: 404})
+            return new NextResponse("No such color found!", {status: 404})
         }
         result = color
-        return NextResponse.json(result)
+
+        return NextResponse.json(result, { status: 200 })
     } catch (error) {
         logger.error(error)
         console.log(error)
-        return NextResponse.json({ message: "Internal Server Error" }, {status: 500})
+        return new NextResponse("Internal Server Error", {status: 500})
     }
 }
 
 export async function PATCH(req: NextRequest, res: NextResponse, { params }: { params: { colorId: number } }) {
     const id = params.colorId
     const {name, value} = await req.json()
-    const token = req.cookies.get('user')?.value
-    const verifiedToken = token && (
-        await verifyAuth(token)
-    )
+    const verifiedToken = await getServerSession(authOptions)
 
     if (!verifiedToken) {
-        return NextResponse.json({ message: "You must be logged in." }, { status: 401});
+        return new NextResponse("Unauthorized!", { status: 401});
     }
     
     const owner = await prisma.user.findUnique({
         where: {
-            email: verifiedToken.email as string
+            email: verifiedToken.user?.email as string
         }
     })
 
     if(owner?.role === 'CLIENT') {
-        return NextResponse.json({ message: "Only the owner/employee can update." }, { status: 401});
+        return new NextResponse("Unauthorized!", { status: 401});
+    } else if (owner?.role === 'EMPLOYEE' && owner.hasAccess === false) {
+        return new NextResponse("Unauthorized!", { status: 401});
     }
 
     try {
@@ -56,7 +58,7 @@ export async function PATCH(req: NextRequest, res: NextResponse, { params }: { p
         })
 
         if(!existingColor) {
-            return NextResponse.json({ message: "No such color found."}, {status: 404})
+            return new NextResponse("No such color found.", {status: 404})
         }
 
         const updateColor = await prisma.color.update({
@@ -69,11 +71,11 @@ export async function PATCH(req: NextRequest, res: NextResponse, { params }: { p
             }
         })
         logger.info('New color updated.')
-        return NextResponse.json(updateColor, {status: 201})
+        return new NextResponse(`${existingColor.name} is updated!`, {status: 200})
     } catch (error) {
         logger.error(error)
         console.log(error)
-        return NextResponse.json({ message: "Internal Server Error" }, {status: 500})
+        return new NextResponse("Internal server error", {status: 500})
     }
 
 }
@@ -81,23 +83,22 @@ export async function PATCH(req: NextRequest, res: NextResponse, { params }: { p
 
 export async function DELETE(req: NextRequest, res: NextResponse, { params }: { params: { colorId: number } }) {
     const id = params.colorId
-    const token = req.cookies.get('user')?.value
-    const verifiedToken = token && (
-        await verifyAuth(token)
-    )
+    const verifiedToken = await getServerSession(authOptions)
 
     if (!verifiedToken) {
-        return NextResponse.json({ message: "You must be logged in." }, { status: 401});
+        return new NextResponse("Unauthorized!", { status: 401});
     }
     
     const owner = await prisma.user.findUnique({
         where: {
-            email: verifiedToken.email as string
+            email: verifiedToken.user?.email as string
         }
     })
 
     if(owner?.role === 'CLIENT') {
-        return NextResponse.json({ message: "Only the owner/employee can delete." }, { status: 401});
+        return new NextResponse("Unauthorized!", { status: 401});
+    } else if (owner?.role === 'EMPLOYEE' && owner.hasAccess === false) {
+        return new NextResponse("Unauthorized!", { status: 401});
     }
 
     try {
@@ -107,7 +108,7 @@ export async function DELETE(req: NextRequest, res: NextResponse, { params }: { 
             }
         })
         if(!existingColor) {
-            return NextResponse.json({ message: "No such color found!"}, {status: 404})
+            return new NextResponse("No such color found!", {status: 404})
         }
 
         await prisma.color.delete({
@@ -116,11 +117,11 @@ export async function DELETE(req: NextRequest, res: NextResponse, { params }: { 
             }
         })
 
-        return NextResponse.json({ message: `${existingColor.name} is successfully deleted!`})
+        return new NextResponse(`${existingColor.name} is successfully deleted!`, { status: 200 })
 
     } catch (error) {
         logger.error(error)
         console.log(error)
-        return NextResponse.json({ message: "Internal Server Error" }, {status: 500})
+        return new NextResponse("Internal server error", {status: 500})
     }
 }

@@ -4,11 +4,18 @@ import { CubeIcon, FileTextIcon, GlobeIcon, HomeIcon, FontFamilyIcon, LaptopIcon
 import { AvatarShortcut } from "@/components/AvatarShortcut";
 import { Search } from "@/components/Search";
 import { MobileNav } from "@/components/MobileNav";
+import getOwnerSession from "@/actions/queries/get-current-user";
+import { redirect } from 'next/navigation';
+import { getServerSession } from "next-auth";
+import { prisma } from "@/lib/prisma";
+import EmptyState from "@/components/EmptyState";
 
 
-export default function SectionsLayout({children}: {
+export default async function SectionsLayout({children}: {
     children: ReactNode
 }) {
+
+    const session = await getServerSession()
     const graphicItems = [
         {
             name: "Dashboard",
@@ -91,12 +98,36 @@ export default function SectionsLayout({children}: {
                 </svg>
         },
     ]
+
+    const currentUser = await prisma.user.findUnique({
+        where: {
+            email: session?.user?.email as string,
+        }, 
+        select: {
+            email: true,
+            firstName: true,
+            hasAccess: true,
+            lastName: true,
+            id: true,
+            role: true,
+            image: true
+        }
+    });
+
+    if(!currentUser) {
+        redirect('/login')
+    } else if (currentUser.role === 'CLIENT') {
+        return <EmptyState title="Unauthorized" subtitle="You do not have access to this section" showReset/>
+    } else if (currentUser.role === 'EMPLOYEE' && currentUser.hasAccess === false) {
+        return <EmptyState title="Unauthorized" subtitle="You do not have access to this section" showReset/>
+    }
+
     return (
         <html>
             <body className="hidden space-y-6 px-10 pb-16 md:block">
                 <div className="flex flex-col lg:flex-row">
                     <aside className="hidden -mx-4 lg:block lg:w-1/5">
-                        <AdminNav graphicItem={graphicItems} adminItem={adminItems} laptopItem={laptopItems}/>
+                        <AdminNav owner={currentUser} graphicItem={graphicItems} adminItem={adminItems} laptopItem={laptopItems}/>
                     </aside>
                     <div className="flex flex-col lg:hidden">
                         <div className="border-b">

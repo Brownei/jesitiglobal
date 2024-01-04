@@ -1,14 +1,18 @@
 import {z} from "zod";
+import { StaticImageData } from "next/image";
 
 
 //USERS 
-const roles = ["Client", "Employee", "Owner"] as const;
+const roles = ["CLIENT", "EMPLOYEE", "OWNER"] as const;
+
 export const userSchema = z.object({
-    firstName: z.string().min(5, 'Your first name should be more than 5 characters.').max(50, 'Your first name should be less than 50 characters.'),
-    lastName: z.string().min(5, 'Your last name should be more than 5 characters.').max(50, 'Your last name should be less than 50 characters.'),
-    email: z.string(),
+    id: z.number(),
+    firstName: z.string().min(1, "The name of this user needs to be more than 5 characters"),
+    lastName: z.string().min(1, "The name of this user needs to be more than 5 characters"),
+    email: z.string().email(),
     image: z.string(),
-    role: z.enum(roles)
+    role: z.enum(roles),
+    hasAccess: z.boolean()
 })
 export type Users = z.infer<typeof userSchema>
 
@@ -81,6 +85,7 @@ export const graphicSchema = z.object({
     colors: z.array(colorSchema),
     sizes: z.array(sizeSchema),
     laminations: z.array(laminationSchema),
+    isPopular: z.boolean(),
     categoryId: z.string(),
 })
 export type Graphics = z.infer<typeof graphicSchema>

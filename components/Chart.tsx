@@ -11,7 +11,7 @@ export const Overview: React.FC<OverviewProps> = ({
   return (
     <ResponsiveContainer width="100%" height={350}>
         <AreaChart
-            width={700}
+            width={1000}
             height={400}
             data={data}
             margin={{

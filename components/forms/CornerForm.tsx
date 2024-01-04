@@ -5,17 +5,21 @@ import { useRouter } from "next/navigation";
 import { Label } from "../ui/label";
 import { Input } from "../ui/input";
 import { FC, useEffect } from "react";
-import { Corners, cornerSchema } from "@/interfaces/interface";
-import { Controller, useForm } from "react-hook-form";
+import { Corners, cornerSchema, Users } from "@/interfaces/interface";
+import { Controller, useForm, SubmitHandler } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import ImageUpload from "../ImageUpload";
+import axios, { AxiosError } from "axios";
+import { toast } from "sonner";
+import { createNewCorner } from "@/actions/server-actions";
 
 type CornerFormProps = {
     title: string;
     initialData?: Corners
+    currentUser: Users
 }
 
-const CornerForm: FC<CornerFormProps> = ({title, initialData}) => {
+const CornerForm: FC<CornerFormProps> = ({title, initialData, currentUser}) => {
     const router = useRouter()
     const defaultValues = initialData ? {
         ...initialData,
@@ -27,6 +31,27 @@ const CornerForm: FC<CornerFormProps> = ({title, initialData}) => {
         resolver: zodResolver(cornerSchema),
         defaultValues
     })
+
+    const onSubmit: SubmitHandler<Corners> = async (data) => {
+        console.log(data)
+        // try {
+        //     const response = await axios.post('/api/colors', {
+        //         data,
+        //         userId: currentUser.id
+        //     })
+        //     if(response.status !== 200) {
+        //         toast.error('Something happened!')
+        //     }
+
+        //     toast.success(`Successfully created!`)
+        //     window.location.assign('/admin-dashboard/colors')
+        // } catch (error) {
+        //     console.log(error)
+        //     if(error instanceof AxiosError) {
+        //         toast.error(error.response?.data)
+        //     }
+        // }
+    }
 
 
     return (
@@ -47,7 +72,7 @@ const CornerForm: FC<CornerFormProps> = ({title, initialData}) => {
 
                 <div className="mt-5 mb-10">
                 <div className="border p-4 rounded-lg w-full mb-[100px]">
-                    <form onSubmit={() => console.log('jdhhf')}>
+                    <form onSubmit={handleSubmit(createNewCorner)}>
                         <div className="grid gap-5">
                             <Controller 
                             name="image"

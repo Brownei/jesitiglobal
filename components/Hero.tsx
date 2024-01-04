@@ -2,14 +2,21 @@
 import profilePic from '../public/2022-11-09.jpg'
 import Image from 'next/image'
 import { Button } from './ui/button'
-import { easeIn, motion } from 'framer-motion'
 import { gsap } from "gsap";
 import CSSRulePlugin from "gsap/CSSRulePlugin";
 import { container, item } from '@/anim/Hero'
-import { useLayoutEffect } from 'react'
+import { useLayoutEffect, useRef } from 'react'
 import { useRouter } from 'next/navigation'
+import { useScroll, useTransform, motion } from 'framer-motion';
+
 
 const Hero = () => {
+    const container = useRef<HTMLDivElement | null>(null);
+    const { scrollYProgress } = useScroll({
+        target: container,
+        offset: ["start end", "end start"]
+    })
+    const height = useTransform(scrollYProgress, [0, 1], [50, -400])
     const router = useRouter()
     const timeline = gsap.timeline({ delay: 0.1 });
 
@@ -28,35 +35,38 @@ const Hero = () => {
 
 return (
     <main id='hero'>
-        <div className='hero relative flex flex-col gap-[-10px] justify-center items-center text-[#061439] p-3 z-20'>
-            <div className='title leading-none flex flex-col mb-[2.4rem] md:mb-[3.2rem] mt-[1.6rem]'>
-                <h2 className='uppercase overflow-hidden font-FuturaExtraBlack text-[5vw] text-center tracking-tighter'>
-                    <span className='block'>All in one</span>
-                </h2>
-                <h1 className='uppercase overflow-hidden font-FuturaExtraBlack px-4 py-0 text-[10vw] text-center tracking-tighter'>
-                    <span className='block'>Solution Hub</span>
-                </h1>
-                <p className='text-center font-Helvetica mt-3 overflow-hidden'>
-                    <span className='block'>A specialist who can grow your business, companies and enterprises</span>
-                </p>
-                <div className='flex gap-3 items-center justify-center text-sm font-FuturaBold my-3 overflow-hidden'>
-                    <Button onClick={() => router.push('/explore-now')} className='button text-center hover:bg-[#96FDFF] hover:text-[#061439] duration-300 font-bold'>
+        <div ref={container} className='hero relative flex flex-col gap-[-10px] justify-center items-center text-[#061439] p-3 z-20'>
+            <div className='title leading-none flex flex-col mb-[2.4rem] md:mb-[3.4rem] mt-[50px]'>
+                <div className='flex flex-col justify-center items-center text-center'>
+                    <h2 className='leading-[42px] uppercase font-FamiljenBold text-center tracking-[-7.91px] md:text-[113px]'>
+                        <span className='block'>All in one</span>
+                    </h2>
+                    <h1 className='uppercase font-FamiljenBold text-center tracking-[-14px] px-4 py-0 md:text-[200px]'>
+                        <span className='block'>Solution Hub</span>
+                    </h1>
+                    <p className='overflow-hidden'>
+                        <span className='block w-[719px] h-[66px] text-center font-PoppinsLight text-[15px] mt-3'>Transform your business with expertise that goes beyond expectations. Experience strategic guidance, innovative solutions, and a commitment to your success. Elevate your business to new heights today.</span>
+                    </p>
+                </div>
+                <div className='flex space-x-[48px] items-center justify-center overflow-hidden'>
+                    <Button onClick={() => router.push('/explore-now')} className='button w-[215px] h-[59px] rounded-[20px] text-center hover:bg-[#96FDFF] hover:text-[#061439] duration-300 font-PoppinsBold text-[15px] uppercase'>
                         Explore now
                     </Button>
-                    <Button className='button flex justify-center items-center hover:bg-[#96FDFF] hover:text-[#061439] duration-300 font-bold'>
+                    <Button className='button w-[215px] h-[59px] rounded-[20px] flex justify-center items-center hover:bg-[#96FDFF] hover:text-[#061439] duration-300 font-PoppinsBold text-[#061439] border-[#22AFFF] bg-white flex-shrink-0 text-[15px] uppercase' variant='outline'>
                         Contact us
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-4 h-4">
-                            <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 4.5l15 15m0 0V8.25m0 11.25H8.25" />
-                        </svg>
                     </Button>
                 </div>
             </div>
 
             <div className='overflow-hidden relative'>
-                <Image className='img' src={profilePic} alt='Logo' width={100*100} height={500} quality={100} priority={false}/>
+                <Image className='img' src={profilePic} alt='Logo' width={1080} height={556} quality={100} priority/>
                 <div className="before z-[3] absolute top-0 right-0 bg-white w-full h-full"></div>
                 <div className="after z-[2] absolute top-0 right-0 bg-[#96FDFF] w-full h-full"></div>
             </div>
+
+            <motion.div style={{ height }} className='relative mt-[100px] '>
+                <div className='h-[1550%] w-[120%] left-[-10%] bg-inherit z-20 absolute shadow-[0_60px_50px_rgba(0,0,0,0.748)] rounded-[0_0_50%_50%]'></div>
+            </motion.div>
         </div>
     </main>
 )

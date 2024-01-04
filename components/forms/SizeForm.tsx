@@ -1,12 +1,13 @@
 "use client"
-import { FC, useState, useEffect, ChangeEvent, useCallback, useMemo } from "react";
-import { Sizes, sizeSchema } from "@/interfaces/interface";
+import { FC, useState, useEffect, ChangeEvent, useCallback, useMemo, SyntheticEvent } from "react";
+import { Sizes, Users } from "@/interfaces/interface";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { ArrowLeftIcon } from "@radix-ui/react-icons";
 import { Button } from "../ui/button";
 import { Label } from "../ui/label";
 import { Input } from "../ui/input";
-
+import axios, { AxiosError } from "axios";
+import { toast } from "sonner";
 
 type SizeFormProps = {
     title: string;
@@ -71,8 +72,30 @@ const SizeForm: FC<SizeFormProps> = ({initialData, title}) => {
         saveToQuery()
     }, [pathname, query, router])
 
-    function onSubmit() {
-        console.log('Hrjrjrhht')
+    async function onSubmit(e: SyntheticEvent) {
+        e.preventDefault()
+        setOnLoading(true)
+
+        try {
+            const response = await axios.post('/api/sizes', {
+                name: size,
+                value: valueSize,
+            })
+            if(response.status !== 200) {
+                toast.error('Something happened!')
+            }
+
+            setOnLoading(false)
+            toast.success(`${size} is created successfully!`)
+            window.location.assign('/admin-dashboard/sizes')
+        } catch (error) {
+            console.log(error)
+            if(error instanceof AxiosError) {
+                toast.error(error.response?.data)
+            }
+        } finally {
+            setOnLoading(false)
+        }
     }
 
 

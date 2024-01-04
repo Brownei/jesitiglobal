@@ -1,6 +1,7 @@
 import logger from "@/lib/logger";
 import { prisma } from "@/lib/prisma";
-import { verifyAuth } from "@/lib/verifyAuth";
+import { getServerSession } from "next-auth";
+import { authOptions } from "../auth/[...nextauth]/options";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(req: NextRequest, res: NextResponse) {
@@ -11,29 +12,28 @@ export async function GET(req: NextRequest, res: NextResponse) {
     } catch (error) {
         logger.error(error)
         console.log(error)
-        return NextResponse.json({ message: "Internal Server Error" }, {status: 500})
+        return new NextResponse("Internal server error", {status: 500})
     }
 }
 
 export async function POST(req: NextRequest, res: NextResponse) {
     const {name, value} = await req.json()
-    const token = req.cookies.get('user')?.value
-    const verifiedToken = token && (
-        await verifyAuth(token)
-    )
+    const verifiedToken = await getServerSession(authOptions)
     
     if (!verifiedToken) {
-        return NextResponse.json({ message: "You must be logged in." }, { status: 401});
+        return new NextResponse("Unauthorized!", { status: 401});
     }
     
     const owner = await prisma.user.findUnique({
         where: {
-            email: verifiedToken.email as string
+            email: verifiedToken.user?.email as string
         }
     })
 
-    if(owner?.role === 'EMPLOYEE' || owner?.role === 'CLIENT') {
-        return NextResponse.json({ message: "Only the owner can create a new product!" }, { status: 401});
+    if(owner?.role === 'CLIENT') {
+        return new NextResponse("Unauthorized!", { status: 401});
+    } else if (owner?.role === 'EMPLOYEE' && owner.hasAccess === false) {
+        return new NextResponse("Unauthorized!", { status: 401});
     }
 
     try {
@@ -44,20 +44,20 @@ export async function POST(req: NextRequest, res: NextResponse) {
         })
 
         if(existingSize) {
-            return NextResponse.json({message: 'This size already exists!. Try something else'})
+            return new NextResponse('This size already exists!', { status: 409 })
         }
 
-        const newSize = await prisma.size.create({
+        await prisma.size.create({
             data: {
                 name,
                 value,
             }
         })
 
-        return NextResponse.json(newSize)
+        return new NextResponse(`${name} is created!`, { status: 201 })
     } catch (error) {
         logger.error(error)
         console.log(error)
-        return NextResponse.json({ message: "Internal Server Error" }, {status: 500})
+        return new NextResponse("Internal server error", {status: 500})
     }
 }

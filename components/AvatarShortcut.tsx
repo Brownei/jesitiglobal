@@ -1,3 +1,4 @@
+"se client"
 import {
     Avatar,
     AvatarFallback,

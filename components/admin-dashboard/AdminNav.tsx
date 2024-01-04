@@ -6,6 +6,8 @@ import { buttonVariants } from "../ui/button"
 import { Separator } from "../ui/separator"
 import Image from "next/image"
 import developer from '@/public/pexels-christina-morillo-1181676.jpg'
+import { useUserStore } from "@/hooks/useUser"
+import { Users } from "@/interfaces/interface"
 
 interface AdminNavProps extends React.HTMLAttributes<HTMLElement> {
   graphicItem: {
@@ -23,11 +25,11 @@ interface AdminNavProps extends React.HTMLAttributes<HTMLElement> {
     name: string
     icon: JSX.Element
   }[];
+  owner: Users
 } 
 
-export function AdminNav({ className, graphicItem, laptopItem, adminItem, ...props }: AdminNavProps) {
+export function AdminNav({ className, graphicItem, laptopItem, adminItem, owner, ...props }: AdminNavProps) {
   const pathname = usePathname()
-  let isOwner = true
 
   return (
     <nav
@@ -40,8 +42,8 @@ export function AdminNav({ className, graphicItem, laptopItem, adminItem, ...pro
       <div className="flex gap-2 items-center m-3">
         <Image className="object-cover rounded-full w-[50px] h-[50px]" src={developer} alt="Profile" width={100} height={100} priority={false} quality={100}/>
         <div className="flex flex-col items-center">
-          <h3 className="font-HelveticaBold">Brownson Esiti</h3>
-          <p className="text-[10px] font-Helvetica">Owner</p>
+          <h3 className="font-HelveticaBold">{owner.firstName} {owner.lastName}</h3>
+          <p className="text-[10px] font-Helvetica">{owner.role}</p>
         </div>
       </div>
       <Separator className="hidden my-[100px] lg:block" />
@@ -89,7 +91,7 @@ export function AdminNav({ className, graphicItem, laptopItem, adminItem, ...pro
       ))}
 
       {/* ADMIN MAIN MENU */}
-      {isOwner === true && (
+      {owner.role === 'OWNER' && (
         <div className="flex lg:left-0 lg:top-0 lg:w-[250px] lg:border-r lg:border-black lg:flex-col lg:space-x-0 lg:space-y-1">
           <h3 className='justify-start opacity-40 text-sm pl-4 pt-3'>Admin Menu</h3>
           {adminItem.map((item) => (

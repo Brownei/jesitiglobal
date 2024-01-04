@@ -2,7 +2,9 @@ import redisClient from "@/lib/redis";
 import logger from "@/lib/logger";
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
-import { verifyAuth } from "@/lib/verifyAuth";
+import { getServerSession } from "next-auth";
+import { authOptions } from "../../auth/[...nextauth]/options";
+
 
 export async function GET(req: NextRequest, res: NextResponse, { params }: { params: { graphicId: number } }) {
     const id = params.graphicId
@@ -22,30 +24,29 @@ export async function GET(req: NextRequest, res: NextResponse, { params }: { par
     } catch (error) {
         logger.error(error)
         console.log(error)
-        return NextResponse.json({ message: "Internal Server Error" }, {status: 500})
+        return new NextResponse("Internal server error", {status: 500})
     }
 }
 
 export async function PATCH(req: NextRequest, res: NextResponse, { params }: { params: { graphicId: number } }) {
     const id = params.graphicId
     const {name, quantity, description, thickness, corners, materials, price, image, sizes, colors, laminations, categoryId} = await req.json()
-    const token = req.cookies.get('user')?.value
-    const verifiedToken = token && (
-        await verifyAuth(token)
-    )
+    const verifiedToken = await getServerSession(authOptions)
 
     if (!verifiedToken) {
-        return NextResponse.json({ message: "You must be logged in." }, { status: 401});
+        return new NextResponse("Unauthorized!", { status: 401});
     }
     
     const owner = await prisma.user.findUnique({
         where: {
-            email: verifiedToken.email as string
+            email: verifiedToken.user?.email as string
         }
     })
 
     if(owner?.role === 'CLIENT') {
-        return NextResponse.json({ message: "Only the owner/employee can update a product." }, { status: 401});
+        return new NextResponse("Unauthorized!", { status: 401});
+    } else if (owner?.role === 'EMPLOYEE' && owner.hasAccess === false) {
+        return new NextResponse("Unauthorized!", { status: 401});
     }
 
     try {
@@ -62,10 +63,10 @@ export async function PATCH(req: NextRequest, res: NextResponse, { params }: { p
         })
 
         if(!existingGraphic) {
-            return NextResponse.json({ message: "No such graphic found."}, {status: 404})
+            return new NextResponse("No such graphic found.", {status: 404})
         }
 
-        const updateGraphic = await prisma.graphic.update({
+        await prisma.graphic.update({
             where: {
                 id
             }, 
@@ -96,11 +97,11 @@ export async function PATCH(req: NextRequest, res: NextResponse, { params }: { p
             }
         })
         logger.info('New graphics created.')
-        return NextResponse.json(updateGraphic, {status: 201})
+        return new NextResponse(`${name} is created!`, {status: 201})
     } catch (error) {
         logger.error(error)
         console.log(error)
-        return NextResponse.json({ message: "Internal Server Error" }, {status: 500})
+        return new NextResponse("Internal server error", {status: 500})
     }
 
 }
@@ -108,23 +109,22 @@ export async function PATCH(req: NextRequest, res: NextResponse, { params }: { p
 
 export async function DELETE(req: NextRequest, res: NextResponse, { params }: { params: { graphicId: number } }) {
     const id = params.graphicId
-    const token = req.cookies.get('user')?.value
-    const verifiedToken = token && (
-        await verifyAuth(token)
-    )
+    const verifiedToken = await getServerSession(authOptions)
 
     if (!verifiedToken) {
-        return NextResponse.json({ message: "You must be logged in." }, { status: 401});
+        return new NextResponse("Unauthorized!", { status: 401});
     }
     
     const owner = await prisma.user.findUnique({
         where: {
-            email: verifiedToken.email as string
+            email: verifiedToken.user?.email as string
         }
     })
 
     if(owner?.role === 'CLIENT') {
-        return NextResponse.json({ message: "Only the owner/employee can delete a product." }, { status: 401});
+        return new NextResponse("Unauthorized!", { status: 401});
+    } else if (owner?.role === 'EMPLOYEE' && owner.hasAccess === false) {
+        return new NextResponse("Unauthorized!", { status: 401});
     }
 
     try {
@@ -137,7 +137,7 @@ export async function DELETE(req: NextRequest, res: NextResponse, { params }: { 
             }
         })
         if(!existingGraphic) {
-            return NextResponse.json({ message: "No such graphic found!"}, {status: 404})
+            return new NextResponse("No such graphic found.", {status: 404})
         }
 
         for(const image of existingGraphic.image) {
@@ -154,11 +154,11 @@ export async function DELETE(req: NextRequest, res: NextResponse, { params }: { 
             }
         })
 
-        return NextResponse.json({ message: `${existingGraphic.name} is successfully deleted!`})
+        return new NextResponse(`${existingGraphic.name} is successfully deleted!`, { status: 200 })
 
     } catch (error) {
         logger.error(error)
         console.log(error)
-        return NextResponse.json({ message: "Internal Server Error" }, {status: 500})
+        return new NextResponse("Internal server error", {status: 500})
     }
 }

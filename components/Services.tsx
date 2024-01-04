@@ -1,50 +1,67 @@
 "use client"
-import Image from 'next/image';
 import developer from '@/public/pexels-christina-morillo-1181676.jpg'
 import tutoring from '@/public/pexels-thisisengineering-3861966.jpg'
 import businessRegi from '@/public/pexels-christina-morillo-1181605.jpg'
 import graphicDesign from '@/public/pexels-jonathan-borba-3052727.jpg'
 import e from '@/public/pexels-karolina-grabowska-5632381.jpg'
 import m from '@/public/pexels-pixabay-414974.jpg'
+import ServiceLayout from './ServiceLayout';
+import { FC, MutableRefObject } from 'react'
 
-const Services = () => {
+type ServicesProps = {
+    serviceRef: MutableRefObject<HTMLDivElement | null>
+}
+
+const Services: FC<ServicesProps> = ({serviceRef}) => {
     const services = [
         {
-            name: "Web Development",
+            id: 1,
+            name: "Custom Web Development",
+            description: "Experience unparalleled digital innovation with our custom web development service. Tailored to meet your unique needs, we specialize in crafting bespoke, high-performance websites. From intuitive user interfaces to seamless functionality, our expert team ensures your online presence reflects the essence of your business. Elevate your brand with a custom web solution that stands out in a competitive digital landscape",
             image: developer
         },
         {
-            name: "Tutoring",
+            id: 2,
+            name: "Soft Skill Training",
+            description: "In the fast-paced digital era, web development services play a pivotal role in shaping the online presence of businesses and individuals. Offering web development services can be a fulfilling venture, blending technical prowess with creative problem-solving. This essay explores key considerations for those venturing into the realm of web development services, from honing skills to establishing a thriving business.",
             image: tutoring
         },
         {
-            name: "Business Registrations",
+            id: 3,
+            name: "Cooperate Affairs Commission(CAC) Registration",
+            description: "In the fast-paced digital era, web development services play a pivotal role in shaping the online presence of businesses and individuals. Offering web development services can be a fulfilling venture, blending technical prowess with creative problem-solving. This essay explores key considerations for those venturing into the realm of web development services, from honing skills to establishing a thriving business.",
             image: businessRegi
         },
         {
-            name: "Graphic Designing",
+            id: 4,
+            name: "Graphic Arts and Design",
+            description: "Immerse your brand in captivating visuals with our Graphic Arts and Design service. Our talented team of designers brings creativity to life, crafting eye-catching logos, stunning marketing collateral, and engaging visual content. Elevate your brand identity and make a lasting impression with our expert Graphic Arts and Design service.",
             image: graphicDesign
         },
         {
-            name: "Chicken",
+            id: 5,
+            name: "Graphic Printing",
+            description: "In the fast-paced digital era, web development services play a pivotal role in shaping the online presence of businesses and individuals. Offering web development services can be a fulfilling venture, blending technical prowess with creative problem-solving. This essay explores key considerations for those venturing into the realm of web development services, from honing skills to establishing a thriving business.",
             image: e
         },
         {
-            name: "Chicken",
+            id: 6,
+            name: "Advertisement",
+            description: "In the fast-paced digital era, web development services play a pivotal role in shaping the online presence of businesses and individuals. Offering web development services can be a fulfilling venture, blending technical prowess with creative problem-solving. This essay explores key considerations for those venturing into the realm of web development services, from honing skills to establishing a thriving business.",
             image: m
         }
     ]
+
+
     return (
-        <main className='mt-[100px]'>
-            <div className='relative container mx-auto p-4 font-Helvetica'>
-                <h1 className='text-center text-[28px] capitalize font-FuturaExtraBold text-[#061439] lg:text-[44px]'>Take control of your enterprises</h1>
-                <p className='text-center text-[1rem] text-[#061439]'>Jesitiglobal enterprise help by offering a wide range of services to take your business, company and enterprise from zero to hero.</p>
-                <div className='grid grid-cols-1 justify-center items-center gap-5 mt-5 md:grid-cols-2 lg:grid-cols-3'>
-                    {services.map((service, index) => (
-                        <div className='relative border w-full overflow-hidden h-[200px] lg:h-[400px]' key={index}>
-                            <div className='absolute left-0 right-0 top-0 bottom-0 bg-gradient-to-b from-transparent to-black/50'/>
-                            <Image className='w-full h-full object-cover' src={service.image} width={1000} height={1000} alt={service.name} quality={100} priority={false}/>
-                            <p className='absolute bottom-3 right-3 text-white font-HelveticaBold text-[1.5rem]'>{service.name}</p>
+        <main ref={serviceRef} className='relative container mx-auto mt-[300px]'>
+            <div className='flex flex-col justify-center items-center text-center p-4'>
+                <h1 className='text-center text-[28px] font-FamiljenBold tracking-[-5.39px] text-white lg:text-[77px]'>Take control of your enterprises</h1>
+                <p className='w-[720.15px] h-[72.81px] flex-shrink-0 flex justify-center items-center text-center text-white mt-[22.5px] font-PoppinsLight text-[15px]'>Unlock the full potential of your business journey with Jesitiglobal Enterprise. Our comprehensive range of services is designed to propel your company from zero to hero. From strategic consulting to innovative solutions, We are here to drive your success. Take the leap towards growth and excellence with Jesitiglobal.</p>
+                <div>
+                    {services.map((service) => (
+                        <div key={service.id}>
+                            <ServiceLayout index={service.id} serviceDescription={service.description} serviceName={service.name} src={service.image}/>
                         </div>
                     ))}
                 </div>

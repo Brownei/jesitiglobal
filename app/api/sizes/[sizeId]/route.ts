@@ -1,7 +1,8 @@
 import logger from "@/lib/logger";
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
-import { verifyAuth } from "@/lib/verifyAuth";
+import { getServerSession } from "next-auth";
+import { authOptions } from "../../auth/[...nextauth]/options";
 
 export async function GET(req: NextRequest, res: NextResponse, { params }: { params: { sizeId: number } }) {
     const id = params.sizeId
@@ -28,10 +29,7 @@ export async function GET(req: NextRequest, res: NextResponse, { params }: { par
 export async function PATCH(req: NextRequest, res: NextResponse, { params }: { params: { sizeId: number } }) {
     const id = params.sizeId
     const {name, value} = await req.json()
-    const token = req.cookies.get('user')?.value
-    const verifiedToken = token && (
-        await verifyAuth(token)
-    )
+    const verifiedToken = await getServerSession(authOptions)
 
     if (!verifiedToken) {
         return NextResponse.json({ message: "You must be logged in." }, { status: 401});
@@ -39,12 +37,14 @@ export async function PATCH(req: NextRequest, res: NextResponse, { params }: { p
     
     const owner = await prisma.user.findUnique({
         where: {
-            email: verifiedToken.email as string
+            email: verifiedToken.user?.email as string
         }
     })
 
     if(owner?.role === 'CLIENT') {
-        return NextResponse.json({ message: "Only the owner/employee can update." }, { status: 401});
+        return new NextResponse("Unauthorized!", { status: 401});
+    } else if (owner?.role === 'EMPLOYEE' && owner.hasAccess === false) {
+        return new NextResponse("Unauthorized!", { status: 401});
     }
 
     try {
@@ -55,10 +55,10 @@ export async function PATCH(req: NextRequest, res: NextResponse, { params }: { p
         })
 
         if(!existingSize) {
-            return NextResponse.json({ message: "No such size found."}, {status: 404})
+            return new NextResponse("No such size found.", {status: 404})
         }
 
-        const updateSize = await prisma.size.update({
+        await prisma.size.update({
             where: {
                 id
             }, 
@@ -68,11 +68,11 @@ export async function PATCH(req: NextRequest, res: NextResponse, { params }: { p
             }
         })
         logger.info('New size updated.')
-        return NextResponse.json(updateSize, {status: 201})
+        return new NextResponse(`${existingSize.name} is updated!`, {status: 200})
     } catch (error) {
         logger.error(error)
         console.log(error)
-        return NextResponse.json({ message: "Internal Server Error" }, {status: 500})
+        return new NextResponse("Internal server error", {status: 500})
     }
 
 }
@@ -80,10 +80,7 @@ export async function PATCH(req: NextRequest, res: NextResponse, { params }: { p
 
 export async function DELETE(req: NextRequest, res: NextResponse, { params }: { params: { sizeId: number } }) {
     const id = params.sizeId
-    const token = req.cookies.get('user')?.value
-    const verifiedToken = token && (
-        await verifyAuth(token)
-    )
+    const verifiedToken = await getServerSession(authOptions)
 
     if (!verifiedToken) {
         return NextResponse.json({ message: "You must be logged in." }, { status: 401});
@@ -91,12 +88,14 @@ export async function DELETE(req: NextRequest, res: NextResponse, { params }: { 
     
     const owner = await prisma.user.findUnique({
         where: {
-            email: verifiedToken.email as string
+            email: verifiedToken.user?.email as string
         }
     })
 
     if(owner?.role === 'CLIENT') {
-        return NextResponse.json({ message: "Only the owner/employee can delete." }, { status: 401});
+        return new NextResponse("Unauthorized!", { status: 401});
+    } else if (owner?.role === 'EMPLOYEE' && owner.hasAccess === false) {
+        return new NextResponse("Unauthorized!", { status: 401});
     }
 
     try {
@@ -106,7 +105,7 @@ export async function DELETE(req: NextRequest, res: NextResponse, { params }: { 
             }
         })
         if(!existingSize) {
-            return NextResponse.json({ message: "No such size found!"}, {status: 404})
+            return new NextResponse("No such size found!", {status: 404})
         }
 
         await prisma.size.delete({
@@ -115,11 +114,11 @@ export async function DELETE(req: NextRequest, res: NextResponse, { params }: { 
             }
         })
 
-        return NextResponse.json({ message: `${existingSize.name} is successfully deleted!`})
+        return new NextResponse(`${existingSize.name} is successfully deleted!`, { status: 200 })
 
     } catch (error) {
         logger.error(error)
         console.log(error)
-        return NextResponse.json({ message: "Internal Server Error" }, {status: 500})
+        return new NextResponse("Internal server error", {status: 500})
     }
 }

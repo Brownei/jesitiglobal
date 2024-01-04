@@ -16,18 +16,18 @@ export type UserColumns = {
     firstName: string;
     lastName: string;
     email: string;
-    image: string;
+    // image: string;
     role: roles
 }
 
 export const userColumns: ColumnDef<UserColumns>[] = [
-    {
-        accessorKey: "image",
-        header: "Profile",
-        cell: (info: any) => (
-            <Image src={info?.getValue()} alt="Profile Image" width={1000} height={1000} quality={100} className="h-12 w-12 rounded-full object-cover"/>
-        ),
-    },
+    // {
+    //     accessorKey: "image",
+    //     header: "",
+    //     cell: (info: any) => (
+    //         <Image src={info?.getValue()} alt="Profile Image" width={1000} height={1000} quality={100} className="h-12 w-12 rounded-full object-cover"/>
+    //     ),
+    // },
     {
         accessorKey: "firstName",
         header: "First Name",

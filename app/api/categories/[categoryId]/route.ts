@@ -1,8 +1,8 @@
 import logger from "../../../../lib/logger";
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "../../../../lib/prisma";
-import { verifyAuth } from "../../../../lib/verifyAuth";
-
+import { getServerSession } from "next-auth";
+import { authOptions } from "../../auth/[...nextauth]/options";
 
 export async function GET(req: NextRequest, res: NextResponse, { params }: { params: { categoryId: number } }) {
     const id = params.categoryId
@@ -14,37 +14,36 @@ export async function GET(req: NextRequest, res: NextResponse, { params }: { par
             }
         })
         if(!category) {
-            return NextResponse.json({ message: "No such category found!"}, {status: 404})
+            return new NextResponse("No such category found!", {status: 404})
         }
 
         return NextResponse.json(category)
     } catch (error) {
         logger.error(error)
         console.log(error)
-        return NextResponse.json({ message: "Internal Server Error" }, {status: 500})
+        return new NextResponse("Internal server error", {status: 500})
     }
 }
 
 export async function PATCH(req: NextRequest, res: NextResponse, { params }: { params: { categoryId: number } }) {
     const id = params.categoryId
     const {name, description} = await req.json()
-    const token = req.cookies.get('user')?.value
-    const verifiedToken = token && (
-        await verifyAuth(token)
-    )
+    const verifiedToken = await getServerSession(authOptions)
 
     if (!verifiedToken) {
-        return NextResponse.json({ message: "You must be logged in." }, { status: 401});
+        return new NextResponse("Unauthorized!", { status: 401});
     }
     
     const owner = await prisma.user.findUnique({
         where: {
-            email: verifiedToken.email as string
+            email: verifiedToken.user?.email as string
         }
     })
 
     if(owner?.role === 'CLIENT') {
-        return NextResponse.json({ message: "Only the owner/employee can update." }, { status: 401});
+        return new NextResponse("Unauthorized!", { status: 401});
+    } else if (owner?.role === 'EMPLOYEE' && owner.hasAccess === false) {
+        return new NextResponse("Unauthorized!", { status: 401});
     }
 
     try {
@@ -56,7 +55,7 @@ export async function PATCH(req: NextRequest, res: NextResponse, { params }: { p
         })
 
         if(!existingCategory) {
-            return NextResponse.json({ message: "No such category found."}, {status: 404})
+            return new NextResponse("No such category found.", {status: 404})
         }
 
         const updateCategory = await prisma.category.update({
@@ -70,11 +69,11 @@ export async function PATCH(req: NextRequest, res: NextResponse, { params }: { p
             }
         })
         logger.info('New category created.')
-        return NextResponse.json(updateCategory, {status: 201})
+        return new NextResponse(`${name} is created!`, {status: 201})
     } catch (error) {
         logger.error(error)
         console.log(error)
-        return NextResponse.json({ message: "Internal Server Error" }, {status: 500})
+        return new NextResponse("Internal Server Error", {status: 500})
     }
 
 }
@@ -82,23 +81,22 @@ export async function PATCH(req: NextRequest, res: NextResponse, { params }: { p
 
 export async function DELETE(req: NextRequest, res: NextResponse, { params }: { params: { categoryId: number } }) {
     const id = params.categoryId
-    const token = req.cookies.get('user')?.value
-    const verifiedToken = token && (
-        await verifyAuth(token)
-    )
+    const verifiedToken = await getServerSession(authOptions)
 
     if (!verifiedToken) {
-        return NextResponse.json({ message: "You must be logged in." }, { status: 401});
+        return new NextResponse("You must be logged in.", { status: 401});
     }
     
     const owner = await prisma.user.findUnique({
         where: {
-            email: verifiedToken.email as string
+            email: verifiedToken.user?.email as string
         }
     })
 
     if(owner?.role === 'CLIENT') {
-        return NextResponse.json({ message: "Only the owner/employee can delete." }, { status: 401});
+        return new NextResponse("Unauthorized!", { status: 401});
+    } else if (owner?.role === 'EMPLOYEE' && owner.hasAccess === false) {
+        return new NextResponse("Unauthorized!", { status: 401});
     }
 
     try {
@@ -109,7 +107,7 @@ export async function DELETE(req: NextRequest, res: NextResponse, { params }: { 
             }
         })
         if(!existingCategory) {
-            return NextResponse.json({ message: "No such Category found!"}, {status: 404})
+            return new NextResponse("No such category found!", {status: 404})
         }
 
         await prisma.category.delete({
@@ -118,11 +116,11 @@ export async function DELETE(req: NextRequest, res: NextResponse, { params }: { 
             }
         })
 
-        return NextResponse.json({ message: `${existingCategory.name} is successfully deleted!`})
+        return new NextResponse(`${existingCategory.name} is successfully deleted!`, { status: 200})
 
     } catch (error) {
         logger.error(error)
         console.log(error)
-        return NextResponse.json({ message: "Internal Server Error" }, {status: 500})
+        return new NextResponse("Internal Server Error", {status: 500})
     }
 }

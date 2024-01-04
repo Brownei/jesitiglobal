@@ -11,38 +11,38 @@ export async function POST(req: NextRequest, res: NextResponse) {
 
     try {
         if (!email || !password) {
-            return NextResponse.json({ message: 'All fields are required' }, {status: 404})
+            return new NextResponse('All fields are required', {status: 404})
         }
         
         const foundUser = await prisma.user.findUnique({
             where: {
                 email
-            }
+            },
         })
         
         if (!foundUser) {
-            return NextResponse.json({ message: 'No user like this!' }, {status: 409})
+            return new NextResponse('No user like this!', {status: 409})
         }
         
-        const match = await compare(password, foundUser.password!)
+        const match = await compare(password, foundUser!.password!)
         
         if (!match) {
-            return NextResponse.json({ message: 'Password incorrect!' }, {status: 409})
+            return new NextResponse('Password incorrect!', {status: 409})
         }
-        
-        const token = await new SignJWT(foundUser).setProtectedHeader({ alg }).setExpirationTime("24h").sign(signature)
+
+        const token = await new SignJWT(foundUser!).setProtectedHeader({ alg }).setExpirationTime("24h").sign(signature)
     
         const response =  NextResponse.json({
-            id: foundUser.id,
-            firstName: foundUser.firstName,
-            lastName: foundUser.lastName,
-            email: foundUser.email,
-            image: foundUser.image,
-            role: foundUser.role
+            id: foundUser!.id,
+            firstName: foundUser!.firstName,
+            lastName: foundUser!.lastName,
+            email: foundUser!.email,
+            image: foundUser!.image,
+            role: foundUser!.role,
         }, {status: 200});
 
         response.cookies.set({
-            name: 'user', 
+            name: 'jwt', 
             value: token,
             maxAge: 60 * 60 * 24,
             httpOnly: true
@@ -52,7 +52,7 @@ export async function POST(req: NextRequest, res: NextResponse) {
     } catch (error) {
         console.log(error)
         logger.info(error)
-        return NextResponse.json({message: 'Error logging in!'})
+        return new NextResponse('Internal server error', {status: 500})
     }
     
 }

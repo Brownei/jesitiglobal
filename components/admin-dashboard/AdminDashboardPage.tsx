@@ -4,14 +4,21 @@ import { BellIcon } from "@radix-ui/react-icons";
 import { Separator } from "../ui/separator";
 import moment from "moment";
 import { Overview } from "../Chart";
+import { FC } from "react";
+import { Users } from "@/interfaces/interface";
 
-const AdminDashboardPage = () => {
+type AdminDashboardPageProps = {
+  owner: Users
+}
+
+const AdminDashboardPage: FC<AdminDashboardPageProps> = ({owner}) => {
   const todayDate = new Date()
   const formatedDate = moment(todayDate).format('DD MMMM, YYYY')
   const totalRevenuePercentage = 50
+
   return (
     <main>
-      <div className="flex flex-row-reverse justify-between items-center">
+      <div className="flex flex-row-reverse justify-between Jitems-center">
           <div className="flex gap-3 items-center">
             <span className="font-HelveticaBold text-sm">{formatedDate}</span>
             <div className="relative">
@@ -20,7 +27,7 @@ const AdminDashboardPage = () => {
             </div>
           </div>
           <div>
-            <h1 className="text-[2rem] font-HelveticaBold">Good Morning, Brownson!</h1>
+            <h1 className="text-[2rem] font-HelveticaBold">Good Morning, {owner!.firstName}!</h1>
             <p className="text-sm font-Helvetica">Here&apos;s what&apos;s happening with your store today</p>
           </div>
       </div>

@@ -1,7 +1,9 @@
 "use client"
-
 import Image, { StaticImageData } from "next/image"
-import { FC } from "react"
+import { FC, useEffect } from "react"
+import CSSRulePlugin from "gsap/CSSRulePlugin";
+import gsap from 'gsap'
+
 
 type ServiceLayoutProps = {
     src: StaticImageData;
@@ -11,6 +13,15 @@ type ServiceLayoutProps = {
 }
 
 const ServiceLayout: FC<ServiceLayoutProps> = ({src, index, serviceName, serviceDescription}) => {
+  // const timeline = gsap.timeline({ delay: 0.1 });
+  // useEffect(() => {
+  //   gsap.registerPlugin(CSSRulePlugin);
+    
+  //   timeline
+  //   .fromTo(".title h2 span", { opacity: 0, y: 120, ease: "Power3.inOut",}, { opacity: 1, y: 0 }, "<0.1")
+
+  // }, [timeline])
+
   return (
     <main className="p-2 flex justify-between items-center">
         <div className="lg:mt-[-100px]">

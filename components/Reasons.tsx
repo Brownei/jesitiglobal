@@ -1,5 +1,4 @@
 "use client"
-
 import ReasonsCard from "./ReasonsCard"
 
 const Reasons = () => {

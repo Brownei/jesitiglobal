@@ -7,9 +7,11 @@ import { AnimatePresence, motion } from 'framer-motion'
 import { opacity } from '@/anim/Nav'
 import Hamburger from './Hamburger'
 import { Button } from './ui/button'
+import { useRouter } from 'next/navigation'
 
 const Nav = () => {
   const [toggle, setToggle] = useState(false)
+  const router = useRouter()
   const NavItems = [
     {
       name: 'Services',
@@ -27,25 +29,29 @@ const Nav = () => {
       name: 'Laptop store',
       href: '/laptop-store'
     },
+    {
+      name: 'Graphic store',
+      href: '/graphics-store'
+    },
   ]
   return (
-    <nav className='relative'>
-      <div className='flex justify-between items-center mx-auto p-3 h-[70px] border border-black'>
+    <nav className='relative mx-auto p-3'>
+      <div className='flex justify-between items-center font-PoppinsLight md:h-[40px]'>
         <Link href={'/'}>
           <Image className='z-40' src={logoPicture} alt='Company Logo' width={50} height={50}/>
         </Link>
-        <motion.div variants={opacity} animate={!toggle ? 'open' : 'closed'} className='hidden gap-10 z-40 lg:flex'>
+        <div className='hidden gap-10 z-40 lg:flex'>
           {NavItems.map((item, index) => (
-            <div className='text-[16px] font-PoppinsLight' key={index}>
+            <div className='text-[16px]' key={index}>
               <Link href={item.href}>{item.name}</Link>
             </div>
           ))}
-        </motion.div>
+        </div>
         <div className='flex flex-row-reverse justify-center gap-2 items-center'>
-          <Button onClick={() => console.log('/explore-now')} className='px-3 py-4 h-[20px] rounded-[20px] text-center hover:bg-[#96FDFF] hover:text-[#061439] duration-300 font-PoppinsBold text-[15px] capitalize'>
+          <Link href={'/explore-now'} className='bg-[#22AFFF] text-white px-[30px] py-[15px] rounded-[15px] text-center hover:bg-[#96FDFF] hover:text-[#061439] duration-300 font-PoppinsBold text-xs uppercase'>
               Explore Now
-          </Button>
-          <Link href={'/'}>Log in</Link>
+          </Link>
+          <Link href={'/login'} className='px-[30px] py-[15px] rounded-[15px] hover:bg-[#061439] hover:text-white duration-300 font-PoppinsBold text-[#061439] border border-[#22AFFF] bg-white text-xs uppercase'>Log in</Link>
         </div>
         {/* <div onClick={() => setToggle(prev => !prev)} className='relative flex flex-col items-center justify-center w-8 h-8 p-2 transition duration-300 transform cursor-pointer z-40 hover:scale-110'>
           <motion.div variants={opacity} animate={!toggle ? 'open' : 'closed'}>

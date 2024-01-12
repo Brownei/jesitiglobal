@@ -69,7 +69,7 @@ const Services: FC<ServicesProps> = ({serviceRef}) => {
             <div className='title flex flex-col justify-center items-center text-center p-4'>
                 <h1 className='text-center text-[28px] font-FamiljenBold tracking-[-5.39px] text-white lg:text-[77px]'>Take control of your enterprises</h1>
                 <p className='w-[720.15px] h-[72.81px] flex-shrink-0 flex justify-center items-center text-center text-white mt-[22.5px] font-PoppinsLight text-[15px]'><span>Unlock the full potential of your business journey with Jesitiglobal Enterprise. Our comprehensive range of services is designed to propel your company from zero to hero. From strategic consulting to innovative solutions, We are here to drive your success. Take the leap towards growth and excellence with Jesitiglobal.</span></p>
-                <div>
+                <div className='grid gap-[64px] mt-[100px]'>
                     {services.map((service) => (
                         <div key={service.id}>
                             <ServiceLayout index={service.id} serviceDescription={service.description} serviceName={service.name} src={service.image}/>

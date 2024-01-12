@@ -1,5 +1,4 @@
 "use client"
-
 import { FC, MutableRefObject } from "react";
 import TestimonialCard from "./TestimonialCard";
 
@@ -26,7 +25,47 @@ const Testimonials: FC<TestimonialsProps> = ({testimonialsRef}) => {
     {
       content: "Lorem ipsum dolor, sit amet consectetur adipisicing elit. Atque, minus officiis repellendus voluptas iure sequi rem ipsum optio reiciendis libero recusandae quam, at beatae magni quisquam magnam esse consectetur harum!",
       name: "Brwonson Esiti"
-    }
+    },
+    {
+      content: "Lorem ipsum dolor, sit amet consectetur adipisicing elit. Atque, minus officiis repellendus voluptas iure sequi rem ipsum optio reiciendis libero recusandae quam, at beatae magni quisquam magnam esse consectetur harum!",
+      name: "Brwonson Esiti"
+    },
+    {
+      content: "Lorem ipsum dolor, sit amet consectetur adipisicing elit. Atque, minus officiis repellendus voluptas iure sequi rem ipsum optio reiciendis libero recusandae quam, at beatae magni quisquam magnam esse consectetur harum!",
+      name: "Brwonson Esiti"
+    },
+    {
+      content: "Lorem ipsum dolor, sit amet consectetur adipisicing elit. Atque, minus officiis repellendus voluptas iure sequi rem ipsum optio reiciendis libero recusandae quam, at beatae magni quisquam magnam esse consectetur harum!",
+      name: "Brwonson Esiti"
+    },
+    {
+      content: "Lorem ipsum dolor, sit amet consectetur adipisicing elit. Atque, minus officiis repellendus voluptas iure sequi rem ipsum optio reiciendis libero recusandae quam, at beatae magni quisquam magnam esse consectetur harum!",
+      name: "Brwonson Esiti"
+    },
+    {
+      content: "Lorem ipsum dolor, sit amet consectetur adipisicing elit. Atque, minus officiis repellendus voluptas iure sequi rem ipsum optio reiciendis libero recusandae quam, at beatae magni quisquam magnam esse consectetur harum!",
+      name: "Brwonson Esiti"
+    },
+    {
+      content: "Lorem ipsum dolor, sit amet consectetur adipisicing elit. Atque, minus officiis repellendus voluptas iure sequi rem ipsum optio reiciendis libero recusandae quam, at beatae magni quisquam magnam esse consectetur harum!",
+      name: "Brwonson Esiti"
+    },
+    {
+      content: "Lorem ipsum dolor, sit amet consectetur adipisicing elit. Atque, minus officiis repellendus voluptas iure sequi rem ipsum optio reiciendis libero recusandae quam, at beatae magni quisquam magnam esse consectetur harum!",
+      name: "Brwonson Esiti"
+    },
+    {
+      content: "Lorem ipsum dolor, sit amet consectetur adipisicing elit. Atque, minus officiis repellendus voluptas iure sequi rem ipsum optio reiciendis libero recusandae quam, at beatae magni quisquam magnam esse consectetur harum!",
+      name: "Brwonson Esiti"
+    },
+    {
+      content: "Lorem ipsum dolor, sit amet consectetur adipisicing elit. Atque, minus officiis repellendus voluptas iure sequi rem ipsum optio reiciendis libero recusandae quam, at beatae magni quisquam magnam esse consectetur harum!",
+      name: "Brwonson Esiti"
+    },
+    {
+      content: "Lorem ipsum dolor, sit amet consectetur adipisicing elit. Atque, minus officiis repellendus voluptas iure sequi rem ipsum optio reiciendis libero recusandae quam, at beatae magni quisquam magnam esse consectetur harum!",
+      name: "Brwonson Esiti"
+    },
   ]
 
   return (

@@ -38,8 +38,8 @@ const PopularCategories = () => {
     <main className='relative container mx-auto p-3'>
         <div className='mt-[50px]'>
             <div className='flex justify-between items-center mb-5'>
-                <h1 className='text-[1rem] font-FuturaBlack md:text-[1.2rem] lg:text-[1.5rem]'>Popular Categories</h1>
-                <Link className='text-[0.5rem] capitalize font-HelveticaBold text-[#22AFFF] md:text-[0.7rem] lg:text-[0.9rem]' href={'/'}>Explore All Categories</Link>
+                <h1 className='text-[1rem] font-FamiljenBold md:text-[1.2rem] lg:text-[1.5rem]'>Popular Categories</h1>
+                <Link className='text-[0.5rem] capitalize font-PoppinsBold text-[#22AFFF] md:text-[0.7rem] lg:text-[0.9rem]' href={'/'}>Explore All Categories</Link>
             </div>
             <Card products={products} CAC='Examine'/>
         </div>

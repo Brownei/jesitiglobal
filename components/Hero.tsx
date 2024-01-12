@@ -41,7 +41,7 @@ return (
                     <h2 className='leading-[42px] uppercase font-FamiljenBold text-center tracking-[-7.91px] md:text-[113px]'>
                         <span className='block'>All in one</span>
                     </h2>
-                    <h1 className='uppercase font-FamiljenBold text-center tracking-[-14px] px-4 py-0 md:text-[200px]'>
+                    <h1 className='uppercase font-FamiljenBold text-center tracking-[-14px] px-4 py-0 md:text-[13rem]'>
                         <span className='block'>Solution Hub</span>
                     </h1>
                     <p className='overflow-hidden'>

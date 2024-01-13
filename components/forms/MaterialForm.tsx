@@ -14,7 +14,7 @@ import { createNewMaterial } from "@/actions/server-actions";
 type MaterialFormProps = {
     title: string;
     initialData?: Materials;
-    currentUser?: Users
+    currentUser?: any
 }
 
 const MaterialForm: FC<MaterialFormProps> = ({title, initialData, currentUser}) => {

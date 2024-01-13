@@ -2,6 +2,7 @@ import CategoryForm from "@/components/forms/CategoryForm"
 import { prisma } from "@/lib/prisma";
 import { getServerSession } from "next-auth";
 import EmptyState from "@/components/EmptyState";
+import { redirect } from "next/navigation";
 
 const CreateNewCategoriesPage = async () => {
   const session = await getServerSession()
@@ -20,10 +21,14 @@ const CreateNewCategoriesPage = async () => {
     }
   });
 
+  if(!currentUser) {
+    redirect('/login')
+  }
+
 
   return (
     <main>
-      <CategoryForm currentUser={currentUser} title='Create a new category'/>
+      <CategoryForm currentUser={currentUser!} title='Create a new category'/>
     </main>
   )
 }

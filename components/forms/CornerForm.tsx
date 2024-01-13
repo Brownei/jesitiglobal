@@ -16,7 +16,7 @@ import { createNewCorner } from "@/actions/server-actions";
 type CornerFormProps = {
     title: string;
     initialData?: Corners
-    currentUser: Users
+    currentUser?: any
 }
 
 const CornerForm: FC<CornerFormProps> = ({title, initialData, currentUser}) => {

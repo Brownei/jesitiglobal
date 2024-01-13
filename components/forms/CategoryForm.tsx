@@ -1,6 +1,7 @@
 "use client"
 
 import { Categories, Users } from "@/interfaces/interface";
+// import { User } from "@prisma/client";
 import { ChangeEvent, FC, useCallback, useState, useMemo, useEffect, SyntheticEvent } from "react"
 import { useSearchParams, usePathname, useRouter } from "next/navigation";
 import { Button } from "../ui/button";
@@ -13,7 +14,7 @@ import axios, { AxiosError } from "axios";
 type CategoryFormProps = {
     title: string;
     initialData?: Categories;
-    currentUser: Users
+    currentUser: any
 }
 
 const CategoryForm: FC<CategoryFormProps> = ({title, initialData, currentUser}) => {
@@ -82,7 +83,7 @@ const CategoryForm: FC<CategoryFormProps> = ({title, initialData, currentUser}) 
             const response = await axios.post('/api/categories', {
                 name,
                 description,
-                userId: currentUser.id
+                userId: currentUser?.id
             })
             if(response.status !== 200) {
                 toast.error('Something happened!')

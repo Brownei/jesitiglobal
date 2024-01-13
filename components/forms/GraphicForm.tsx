@@ -17,7 +17,7 @@ import { Graphics, graphicSchema, Users } from "@/interfaces/interface";
 type GraphicFormProps = {
     title: string;
     initialData?: Graphics;
-    currentUser?: Users
+    currentUser?: any
 }
 
 const GraphicForm: FC<GraphicFormProps> = ({title, initialData, currentUser}) => {

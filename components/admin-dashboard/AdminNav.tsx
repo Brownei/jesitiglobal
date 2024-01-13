@@ -25,7 +25,7 @@ interface AdminNavProps extends React.HTMLAttributes<HTMLElement> {
     name: string
     icon: JSX.Element
   }[];
-  owner: Users
+  owner: any
 } 
 
 export function AdminNav({ className, graphicItem, laptopItem, adminItem, owner, ...props }: AdminNavProps) {

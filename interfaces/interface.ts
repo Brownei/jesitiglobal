@@ -7,10 +7,10 @@ const roles = ["CLIENT", "EMPLOYEE", "OWNER"] as const;
 
 export const userSchema = z.object({
     id: z.number(),
-    firstName: z.string().min(1, "The name of this user needs to be more than 5 characters"),
-    lastName: z.string().min(1, "The name of this user needs to be more than 5 characters"),
-    email: z.string().email(),
-    image: z.string(),
+    firstName: z.string().min(1, "The name of this user needs to be more than 5 characters").nullable(),
+    lastName: z.string().min(1, "The name of this user needs to be more than 5 characters").nullable(),
+    email: z.string().email().nullable(),
+    image: z.string().nullable(),
     role: z.enum(roles),
     hasAccess: z.boolean()
 })

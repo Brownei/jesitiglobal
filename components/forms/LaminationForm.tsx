@@ -14,7 +14,7 @@ import { Laminations, laminationSchema, Users } from "@/interfaces/interface"
 type LaminationFormProps = {
     title: string;
     initialData?: any;
-    currentUser?: Users
+    currentUser?: any
 }
 
 type image = {

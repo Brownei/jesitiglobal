@@ -8,7 +8,7 @@ import { FC } from "react";
 import { Users } from "@/interfaces/interface";
 
 type AdminDashboardPageProps = {
-  owner: Users
+  owner: any
 }
 
 const AdminDashboardPage: FC<AdminDashboardPageProps> = ({owner}) => {

@@ -16,7 +16,7 @@ import { Laptops, laptopSchema, Users } from "@/interfaces/interface";
 type LaptopFormProps = {
     title: string;
     initialData?: Laptops;
-    currentUser?: Users
+    currentUser?: any
 }
 
 const LaptopForm: FC<LaptopFormProps> = ({title, initialData, currentUser}) => {

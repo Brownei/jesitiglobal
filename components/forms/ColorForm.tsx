@@ -13,7 +13,7 @@ import { toast } from "sonner";
 type ColorFormProps = {
     title: string;
     initialData?: Colors;
-    currentUser: Users
+    currentUser?: Users
 }
 
 type Color = {

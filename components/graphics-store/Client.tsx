@@ -1,10 +1,11 @@
+"use client"
 import Image from "next/image"
 import graphicDesign from '@/public/pexels-jonathan-borba-3052727.jpg'
 import SearchComponent from "@/components/SearchComponent";
 import PopularProducts from "@/components/graphics-store/PopularProducts";
 import PopularCategories from "@/components/graphics-store/PopularCategories";
 
-const GraphicStorePage = () => {
+const Client = () => {
   return (
     <main>
         <div>
@@ -24,4 +25,4 @@ const GraphicStorePage = () => {
   )
 }
 
-export default GraphicStorePage;
+export default Client

@@ -8,10 +8,10 @@ export default function SectionsLayout({children}: {
 }) {
     return (
         <html>
-            <body>
-            <Banner />
-            <Nav />
-            {children}
+            <body className="bg-[#DFF6FF] transition-colors duration-500 text-[#061439]">
+                <Banner />
+                <Nav />
+                {children}
             </body>
         </html>
     )

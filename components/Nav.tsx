@@ -31,7 +31,7 @@ const Nav = () => {
     },
     {
       name: 'Graphic store',
-      href: '/graphics-store'
+      href: '/graphics'
     },
   ]
   return (
@@ -49,7 +49,7 @@ const Nav = () => {
         </div>
         <div className='flex flex-row-reverse justify-center gap-2 items-center'>
           <Link href={'/explore-now'} className='bg-[#22AFFF] text-white px-[30px] py-[15px] rounded-[15px] text-center hover:bg-[#96FDFF] hover:text-[#061439] duration-300 font-PoppinsBold text-xs uppercase'>
-              Explore Now
+              Contact Us
           </Link>
           <Link href={'/login'} className='px-[30px] py-[15px] rounded-[15px] hover:bg-[#061439] hover:text-white duration-300 font-PoppinsBold text-[#061439] border border-[#22AFFF] bg-white text-xs uppercase'>Log in</Link>
         </div>
@@ -75,3 +75,4 @@ const Nav = () => {
 }
 
 export default Nav;
+

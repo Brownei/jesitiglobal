@@ -1,7 +1,7 @@
 "use client"
 
 import { FC } from "react"
-import {Testimonial} from "./Testimonials"
+import {Testimonial} from "./homePage/Testimonials"
 
 type TestimonialCardProps = {
     testimonials: Testimonial[]

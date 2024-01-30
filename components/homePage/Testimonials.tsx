@@ -1,17 +1,12 @@
 "use client"
-import { FC, MutableRefObject } from "react";
-import TestimonialCard from "./TestimonialCard";
+import TestimonialCard from "../TestimonialCard";
 
 export type Testimonial = {
   content: string;
   name: string;
 }
 
-type TestimonialsProps = {
-  testimonialsRef: MutableRefObject<HTMLDivElement | null>
-}
-
-const Testimonials: FC<TestimonialsProps> = ({testimonialsRef}) => {
+const Testimonials = () => {
 
   const Testimonial: Testimonial[] = [
     {
@@ -69,9 +64,9 @@ const Testimonials: FC<TestimonialsProps> = ({testimonialsRef}) => {
   ]
 
   return (
-    <main ref={testimonialsRef} className='relative mt-[200px] py-[100px]'>
-      <div className="flex flex-col gap-3 justify-center items-center">
-        <h1 className='text-center text-[28px] font-FamiljenBold text-white tracking-[-4.9px] lg:text-[70px]'>What do they say about us?</h1>
+    <main className='relative bg-[#061439] mt-[80px] py-[100px]'>
+      <div className="flex flex-col justify-center items-center md:gap-3">
+        <h1 className='text-center text-[2rem] tracking-[-2px] text-white font-FamiljenBold md:tracking-[-5.39px] md:text-[4.8rem]'>What do they say about us?</h1>
         <TestimonialCard testimonials={Testimonial}/>
       </div>
     </main>

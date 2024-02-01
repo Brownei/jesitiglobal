@@ -39,7 +39,7 @@ const HamburgerBody: FC<HamburgerBodyProps> = ({links, selectedLink, setSelected
                 return (
                     <Link key={`l_${index}`} href={href} onMouseDown={() => setToggle(prev => !prev)}>
                         <motion.p
-                        className='flex items-end text-[#061439] overflow-hidden font-[32px] pr-[30px] pt-[10px] font-FuturaBold uppercase'
+                        className='flex items-end text-white overflow-hidden font-[2rem] pr-[30px] pt-[10px] font-FuturaBold uppercase'
                         onMouseDown={() => {setSelectedLink({isActive: true, index})}} 
                         variants={blur} 
                         animate={selectedLink.isActive && selectedLink.index != index ? "open" : "closed"}>

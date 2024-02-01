@@ -1,12 +1,14 @@
 "use client"
+import { services } from '@/lib/data';
 import Image from 'next/image'
+import Link from 'next/link';
 import logoPicture from '/public/companyLogo.jpg'
 
 const Footer = () => {
   return (
     <main>
-      <div className='bg-[#061439] text-white flex flex-col gap-5 items-start p-5 mt-[100px] lg:gap-[150px] lg:flex-row'>
-        <Image className='hidden w-[300px] h-fit object-cover lg:block' src={logoPicture} alt='Logo' width={1000} height={1000}/>
+      <div className='bg-[#061439] text-white flex flex-col gap-5 items-start p-5 mt-[100px] md:gap-[150px] md:flex-row'>
+        <Image className='hidden w-[200px] h-fit object-cover md:block lg:w-[300px]' src={logoPicture} alt='Logo' width={1000} height={1000}/>
 
         {/* INFORMATION */}
         <div className="flex flex-col gap-4 items-start font-PoppinsLight">
@@ -35,12 +37,11 @@ const Footer = () => {
         <div className="flex flex-col gap-4 items-start font-PoppinsLight">
           <span className='text-[1.2rem]'>Services</span>
           <ul className='text-[0.9rem] grid gap-2 text-gray-400'>
-            <li className='hover:text-white'>Custom web development</li>
-            <li className='hover:text-white'>Soft skill training</li>
-            <li className='hover:text-white'>CAC registrations</li>
-            <li className='hover:text-white'>Graphic arts</li>
-            <li className='hover:text-white'>Graphic printing</li>
-            <li className='hover:text-white'>Product advertisement</li>
+            {services.map((service, index) => (
+              <li key={index} className='hover:text-white'>
+                <Link href={`/services/${service.name}`}>{service.name}</Link>
+              </li>
+            ))}
           </ul>
         </div>
       </div>

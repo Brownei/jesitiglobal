@@ -4,19 +4,24 @@ import ReasonsCard from "../ReasonsCard"
 const Reasons = () => {
   const reasons = [
     {
-      name: "One stop solution"
+      name: "One Stop Solution",
+      description: "Offering a wide range of services under one roof saves your company, business or enterprise time and effort. They can get all their design, development, registration and printing needs met without dealing with multiple vendors, ensuring consistency in branding and communication."
     },
     {
-      name: "One stop solution"
+      name: "Expertise and Quality",
+      description: "Demonstrating a high level of expertise and delivering quality work is essential. Showcasing a portfolio of impressive designs, successful websites and satisfied clients build trust. High quality work often leads to positive word of mouth referrals, which can attract more clients."
     },
     {
-      name: "One stop solution"
+      name: "Excellent Customer Service",
+      description: "Exceptional customer service, including clear communication, responsiveness and willingness to accommodate changes, can set you apart. A positive client experience encourages repeat business and referrals."
     },
     {
-      name: "One stop solution"
+      name: "Print Quality and Options",
+      description: "For printing services, offering a variety of high quality printing materials and finishes, along with options for customization, allows companies to create marketing materials that truly stand out. High-resolution prints and attention to detail make a significant difference."
     },
     {
-      name: "One stop solution"
+      name: "Innovation and Technology",
+      description: "Staying updated with the latest design trends, web technologies and printing techniques showcases your commitment to innovation. Being able to offer cutting edge solutions can attract forward-thinking companies seeking modern and visually appealing designs."
     },
   ]
   return (
@@ -29,7 +34,7 @@ const Reasons = () => {
         <div className='flex flex-col justify-center gap-3 mt-[70px] items-center text-center lg:flex-row'>
           {reasons.map((reason, index) => (
             <div key={index}>
-              <ReasonsCard reason={reason.name} id={index}/>
+              <ReasonsCard reason={reason.name} id={index} description={reason.description}/>
             </div>
           ))}
         </div>

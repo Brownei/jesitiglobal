@@ -63,7 +63,7 @@ return (
                         <Button className='button text-center hover:bg-[#96FDFF] hover:text-[#061439] duration-300 font-PoppinsBold text-[0.7rem] w-[120px] h-[45px] rounded-[15px] uppercase md:text-[0.9rem] md:rounded-[20px] md:w-[215px] md:h-[59px]'>
                             <Link href={'/services'}>Explore now</Link>
                         </Button>
-                        <Button onClick={() => window.open(`https://wa.me/+2347038808886?text=${message}`, '_blank')} className='button flex justify-center items-center text-[#061439] border-[#22AFFF] bg-white flex-shrink-0 button text-center hover:bg-[#96FDFF] hover:text-[#061439] duration-300 font-PoppinsBold text-[0.7rem] w-[120px] h-[45px] rounded-[15px] uppercase md:text-[0.9rem] md:rounded-[20px] md:w-[215px] md:h-[59px]' variant='outline'>
+                        <Button onClick={() => window.open(`https://wa.me/+2347038808886?text=${message}`, '_blank')} className='button flex justify-center items-center text-[#061439] border-[#22AFFF] bg-white flex-shrink-0 button text-center hover:bg-[#061439] hover:text-white duration-300 font-PoppinsBold text-[0.7rem] w-[120px] h-[45px] rounded-[15px] uppercase md:text-[0.9rem] md:rounded-[20px] md:w-[215px] md:h-[59px]' variant='outline'>
                             Contact us
                         </Button>
                     </div>

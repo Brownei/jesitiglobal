@@ -18,10 +18,6 @@ const Nav = () => {
       href: '/services'
     },
     {
-      name: 'Contact',
-      href: '/contact'
-    },
-    {
       name: 'About us',
       href: '/about-us'
     },
@@ -31,7 +27,7 @@ const Nav = () => {
     },
     {
       name: 'Graphic store',
-      href: '/graphics'
+      href: '/graphic-store'
     },
   ]
   return (
@@ -40,20 +36,24 @@ const Nav = () => {
         <Link href={'/'}>
           <Image className='z-40' src={logoPicture} alt='Company Logo' width={50} height={50}/>
         </Link>
-        <div className='hidden gap-10 z-40 lg:flex'>
+
+        <div className='hidden gap-10 z-40 justify-center items-center md:flex'>
           {NavItems.map((item, index) => (
             <div className='text-[16px]' key={index}>
               <Link href={item.href}>{item.name}</Link>
             </div>
           ))}
         </div>
-        <div className='flex flex-row-reverse justify-center gap-2 items-center'>
-          <Link href={'/explore-now'} className='bg-[#22AFFF] text-white px-[30px] py-[15px] rounded-[15px] text-center hover:bg-[#96FDFF] hover:text-[#061439] duration-300 font-PoppinsBold text-xs uppercase'>
+
+        <div className='hidden flex-row-reverse gap-2 items-center md:flex'>
+          <Link href={'/explore-now'} className='bg-[#22AFFF] text-white px-[24px] py-[12px] rounded-[10px] text-center hover:bg-[#96FDFF] hover:text-[#061439] duration-300 font-PoppinsBold text-xs uppercase'>
               Contact Us
           </Link>
-          <Link href={'/login'} className='px-[30px] py-[15px] rounded-[15px] hover:bg-[#061439] hover:text-white duration-300 font-PoppinsBold text-[#061439] border border-[#22AFFF] bg-white text-xs uppercase'>Log in</Link>
+          <Link href={'/login'} className='px-[24px] py-[12px] rounded-[10px] hover:bg-[#061439] hover:text-white duration-300 font-PoppinsBold text-[#061439] border border-[#22AFFF] bg-white text-xs uppercase md:block'>
+            Log in
+          </Link>
         </div>
-        {/* <div onClick={() => setToggle(prev => !prev)} className='relative flex flex-col items-center justify-center w-8 h-8 p-2 transition duration-300 transform cursor-pointer z-40 hover:scale-110'>
+        <div onClick={() => setToggle(prev => !prev)} className='relative flex flex-col items-center justify-center w-8 h-8 p-2 transition duration-300 transform cursor-pointer z-40 hover:scale-110 md:hidden'>
           <motion.div variants={opacity} animate={!toggle ? 'open' : 'closed'}>
             <div className='w-6 h-0.5 mb-1 bg-gray-800 transition-transform' />
             <div className='w-6 h-0.5 bg-gray-800 transition-transform' />
@@ -62,10 +62,10 @@ const Nav = () => {
             <div className="w-6 h-0.5 bg-gray-800 rotate-45 transition-transform"></div>
             <div className="w-6 h-0.5 bg-gray-800 -rotate-45 transition-transform"></div>
           </motion.div>
-        </div> */}
+        </div>
       </div>
 
-      <div className='fixed top-0 w-full box-border px-[10px] z-30 bg-[#22AFFF]'>
+      <div className='fixed top-0 left-0 right-0 w-full box-border px-[10px] z-30 bg-[#22AFFF]'>
         <AnimatePresence mode='wait'>
           {toggle && <Hamburger setToggle={setToggle}/>}
         </AnimatePresence>

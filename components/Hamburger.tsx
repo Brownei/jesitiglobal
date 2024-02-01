@@ -12,51 +12,42 @@ export type HamburgerType = {
 export type Links = {
     title: string;
     href: string;
-    src: string;
 }
 
 const links: Links[] = [
   {
     title: "Home",
     href: "/",
-    src: "home.png"
   },
   {
     title: "Laptop Shop",
-    href: "/shop",
-    src: "shop.png"
+    href: "/laptop-store",
+  },
+  {
+    title: "Graphic Shop",
+    href: "/graphic-store",
   },
   {
     title: "About Us",
     href: "/about",
-    src: "home.png"
   },
   {
     title: "How can we help?",
-    href: "/lookbook",
-    src: "lookbook.png"
-  },
-  {
-    title: "Contact",
-    href: "/contact",
-    src: "contact.png"
+    href: "/services",
   },
   {
     title: "Sign Up",
-    href: "/contact",
-    src: "contact.png"
+    href: "/sign-up",
   },
   {
     title: "Log In",
-    href: "/contact",
-    src: "contact.png"
+    href: "/login",
   }
 ]
 const Hamburger = ({setToggle}: {setToggle: (value: React.SetStateAction<boolean>) => void
 }) => {
 
   const [selectedLink, setSelectedLink] = useState<HamburgerType>({isActive: false, index: 0});
-
   return (
     <motion.div variants={height} initial="initial" animate="enter" exit="exit" className='overflow-hidden'>
       <div className='flex flex-col justify-end items-center mb-[80px] lg:mb-0'>

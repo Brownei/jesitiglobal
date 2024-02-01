@@ -4,6 +4,7 @@ import businessRegi from '@/public/pexels-christina-morillo-1181605.jpg'
 import graphicDesign from '@/public/pexels-jonathan-borba-3052727.jpg'
 import e from '@/public/pexels-karolina-grabowska-5632381.jpg'
 import m from '@/public/pexels-pixabay-414974.jpg'
+import { Testimonial } from '@/components/homePage/Testimonials'
 
 export const services = [
     {
@@ -20,7 +21,7 @@ export const services = [
     },
     {
         id: 3,
-        name: "Cooperate Affairs Commission(CAC) Registration",
+        name: "CAC Registration",
         description: "In the fast-paced digital era, web development services play a pivotal role in shaping the online presence of businesses and individuals. Offering web development services can be a fulfilling venture, blending technical prowess with creative problem-solving. This essay explores key considerations for those venturing into the realm of web development services, from honing skills to establishing a thriving business.",
         image: businessRegi
     },
@@ -43,3 +44,66 @@ export const services = [
         image: m
     }
 ]
+
+export   const testimonials: Testimonial[] = [
+  {
+    content: "Lorem ipsum dolor, sit amet consectetur adipisicing elit. Atque, minus officiis repellendus voluptas iure sequi rem ipsum optio reiciendis libero recusandae quam, at beatae magni quisquam magnam esse consectetur harum!",
+    name: "Brwonson Esiti"
+  },
+  {
+    content: "Lorem ipsum dolor, sit amet consectetur adipisicing elit. Atque, minus officiis repellendus voluptas iure sequi rem ipsum optio reiciendis libero recusandae quam, at beatae magni quisquam magnam esse consectetur harum!",
+    name: "Brwonson Esiti"
+  },
+  {
+    content: "Lorem ipsum dolor, sit amet consectetur adipisicing elit. Atque, minus officiis repellendus voluptas iure sequi rem ipsum optio reiciendis libero recusandae quam, at beatae magni quisquam magnam esse consectetur harum!",
+    name: "Brwonson Esiti"
+  },
+  {
+    content: "Lorem ipsum dolor, sit amet consectetur adipisicing elit. Atque, minus officiis repellendus voluptas iure sequi rem ipsum optio reiciendis libero recusandae quam, at beatae magni quisquam magnam esse consectetur harum!",
+    name: "Brwonson Esiti"
+  },
+  {
+    content: "Lorem ipsum dolor, sit amet consectetur adipisicing elit. Atque, minus officiis repellendus voluptas iure sequi rem ipsum optio reiciendis libero recusandae quam, at beatae magni quisquam magnam esse consectetur harum!",
+    name: "Brwonson Esiti"
+  },
+  {
+    content: "Lorem ipsum dolor, sit amet consectetur adipisicing elit. Atque, minus officiis repellendus voluptas iure sequi rem ipsum optio reiciendis libero recusandae quam, at beatae magni quisquam magnam esse consectetur harum!",
+    name: "Brwonson Esiti"
+  },
+    {
+      content: "Lorem ipsum dolor, sit amet consectetur adipisicing elit. Atque, minus officiis repellendus voluptas iure sequi rem ipsum optio reiciendis libero recusandae quam, at beatae magni quisquam magnam esse consectetur harum!",
+      name: "Brwonson Esiti"
+    },
+    {
+      content: "Lorem ipsum dolor, sit amet consectetur adipisicing elit. Atque, minus officiis repellendus voluptas iure sequi rem ipsum optio reiciendis libero recusandae quam, at beatae magni quisquam magnam esse consectetur harum!",
+      name: "Brwonson Esiti"
+    },
+    {
+      content: "Lorem ipsum dolor, sit amet consectetur adipisicing elit. Atque, minus officiis repellendus voluptas iure sequi rem ipsum optio reiciendis libero recusandae quam, at beatae magni quisquam magnam esse consectetur harum!",
+      name: "Brwonson Esiti"
+    },
+    {
+      content: "Lorem ipsum dolor, sit amet consectetur adipisicing elit. Atque, minus officiis repellendus voluptas iure sequi rem ipsum optio reiciendis libero recusandae quam, at beatae magni quisquam magnam esse consectetur harum!",
+      name: "Brwonson Esiti"
+    },
+    {
+      content: "Lorem ipsum dolor, sit amet consectetur adipisicing elit. Atque, minus officiis repellendus voluptas iure sequi rem ipsum optio reiciendis libero recusandae quam, at beatae magni quisquam magnam esse consectetur harum!",
+      name: "Brwonson Esiti"
+    },
+    {
+      content: "Lorem ipsum dolor, sit amet consectetur adipisicing elit. Atque, minus officiis repellendus voluptas iure sequi rem ipsum optio reiciendis libero recusandae quam, at beatae magni quisquam magnam esse consectetur harum!",
+      name: "Brwonson Esiti"
+    },
+    {
+      content: "Lorem ipsum dolor, sit amet consectetur adipisicing elit. Atque, minus officiis repellendus voluptas iure sequi rem ipsum optio reiciendis libero recusandae quam, at beatae magni quisquam magnam esse consectetur harum!",
+      name: "Brwonson Esiti"
+    },
+    {
+      content: "Lorem ipsum dolor, sit amet consectetur adipisicing elit. Atque, minus officiis repellendus voluptas iure sequi rem ipsum optio reiciendis libero recusandae quam, at beatae magni quisquam magnam esse consectetur harum!",
+      name: "Brwonson Esiti"
+    },
+    {
+      content: "Lorem ipsum dolor, sit amet consectetur adipisicing elit. Atque, minus officiis repellendus voluptas iure sequi rem ipsum optio reiciendis libero recusandae quam, at beatae magni quisquam magnam esse consectetur harum!",
+      name: "Brwonson Esiti"
+    },
+  ]

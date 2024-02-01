@@ -5,8 +5,8 @@ import developer from '@/public/pexels-christina-morillo-1181676.jpg'
 
 const AboutPage = () => {
   return (
-    <main className="relative container mx-auto p-4">
-        <div className="flex flex-col gap-10 justify-start items-start mt-[50px] lg:flex-row">
+    <main>
+        <div className="relative container mx-auto p-4 flex flex-col gap-10 justify-start items-start mt-[50px] lg:flex-row">
             <Image className="object-cover md:w-[392px] md:h-[606px] lg:w-[592px] lg:h-[806px]" src={developer} alt="Company" width={1000} height={1000}/>
             <div>
                 <h1 className='text-start text-[2rem] tracking-[-2px] font-FamiljenBold md:tracking-[-5.39px] md:text-[4.8rem]'>About Jesitiglobal</h1>

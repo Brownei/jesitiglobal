@@ -8,6 +8,7 @@ import { opacity } from '@/anim/Nav'
 import Hamburger from './Hamburger'
 import { Button } from './ui/button'
 import { useRouter } from 'next/navigation'
+import { FlyoutLink, PricingContent } from './Links'
 
 const Nav = () => {
   const [toggle, setToggle] = useState(false)
@@ -40,7 +41,13 @@ const Nav = () => {
         <div className='hidden gap-10 z-40 justify-center items-center md:flex'>
           {NavItems.map((item, index) => (
             <div className='text-[16px]' key={index}>
-              <Link href={item.href}>{item.name}</Link>
+              {item.name === 'Services' ? (
+                <FlyoutLink href='#' FlyoutContent={PricingContent}>
+                  {item.name}
+                </FlyoutLink>
+              ): (                
+                <Link href={item.href}>{item.name}</Link>
+              )}
             </div>
           ))}
         </div>
@@ -55,12 +62,12 @@ const Nav = () => {
         </div>
         <div onClick={() => setToggle(prev => !prev)} className='relative flex flex-col items-center justify-center w-8 h-8 p-2 transition duration-300 transform cursor-pointer z-40 hover:scale-110 md:hidden'>
           <motion.div variants={opacity} animate={!toggle ? 'open' : 'closed'}>
-            <div className='w-6 h-0.5 mb-1 bg-gray-800 transition-transform' />
-            <div className='w-6 h-0.5 bg-gray-800 transition-transform' />
+            <div className='w-6 h-0.5 mb-1 bg-[#061439] transition-transform' />
+            <div className='w-6 h-0.5 bg-[#061439] transition-transform' />
           </motion.div>
           <motion.div variants={opacity} animate={toggle ? 'open' : 'closed'} className='fixed opacity-0'>
-            <div className="w-6 h-0.5 bg-gray-800 rotate-45 transition-transform"></div>
-            <div className="w-6 h-0.5 bg-gray-800 -rotate-45 transition-transform"></div>
+            <div className="w-6 h-0.5 bg-white rotate-45 transition-transform"></div>
+            <div className="w-6 h-0.5 bg-white -rotate-45 transition-transform"></div>
           </motion.div>
         </div>
       </div>

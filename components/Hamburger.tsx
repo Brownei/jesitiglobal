@@ -1,8 +1,10 @@
 'use client';
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { height } from '../anim/Hamburger';
+import { menuSlide } from '../anim/Hamburger';
 import HamburgerBody from './HamburgerBody';
+import { usePathname } from 'next/navigation';
+import LinkForNav from './LinkForNav';
 
 export type HamburgerType = {
     isActive: boolean
@@ -29,10 +31,10 @@ const links: Links[] = [
   },
   {
     title: "About Us",
-    href: "/about",
+    href: "/about-us",
   },
   {
-    title: "How can we help?",
+    title: "Services",
     href: "/services",
   },
   {
@@ -46,13 +48,32 @@ const links: Links[] = [
 ]
 const Hamburger = ({setToggle}: {setToggle: (value: React.SetStateAction<boolean>) => void
 }) => {
-
-  const [selectedLink, setSelectedLink] = useState<HamburgerType>({isActive: false, index: 0});
+  const pathname = usePathname();
+  const [selectedLink, setSelectedLink] = useState(pathname);
   return (
-    <motion.div variants={height} initial="initial" animate="enter" exit="exit" className='overflow-hidden'>
-      <div className='flex flex-col justify-end items-center mb-[80px] lg:mb-0'>
-        <HamburgerBody setToggle={setToggle} links={links} selectedLink={selectedLink} setSelectedLink={setSelectedLink}/>
-      </div>
+    <motion.div 
+      variants={menuSlide} 
+      initial="initial" 
+      animate="enter" 
+      exit="exit" 
+      className="h-[100dvh] bg-[#061439] fixed right-0 top-0 text-white"
+    >
+      <div className="box-border h-full p-[100px] flex flex-col justify-between">
+        <div onMouseLeave={() => {setSelectedLink(pathname)}} className="flex flex-col text-[2rem] gap-[20px] mt-[10px]">
+          {
+            links.map((link, index) => {
+              return <LinkForNav 
+                  key={index} 
+                  data={{...link, index}} 
+                  isActive={selectedLink == link.href} 
+                  setSelectedIndicator={setSelectedLink} 
+                  setToggle={setToggle}
+                />
+            })
+          }
+        </div>
+        </div>
+
     </motion.div>
   )
 }

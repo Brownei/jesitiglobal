@@ -59,7 +59,7 @@ const Hamburger = ({setToggle}: {setToggle: (value: React.SetStateAction<boolean
       className="h-[100dvh] bg-[#061439] fixed right-0 top-0 text-white"
     >
       <div className="box-border h-full p-[100px] flex flex-col justify-between">
-        <div onMouseLeave={() => {setSelectedLink(pathname)}} className="flex flex-col text-[2rem] gap-[20px] mt-[10px]">
+        <div onMouseLeave={() => {setSelectedLink(pathname)}} className="flex flex-col text-[2rem] font-FamiljenItalic gap-[20px] mt-[10px]">
           {
             links.map((link, index) => {
               return <LinkForNav 

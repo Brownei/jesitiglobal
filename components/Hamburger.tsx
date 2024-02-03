@@ -2,7 +2,6 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { menuSlide } from '../anim/Hamburger';
-import HamburgerBody from './HamburgerBody';
 import { usePathname } from 'next/navigation';
 import LinkForNav from './LinkForNav';
 

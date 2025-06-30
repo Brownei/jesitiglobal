@@ -2,12 +2,12 @@
 import { FC, useState } from "react"
 
 type ReasonsCardProps = {
-    reason: string;
-    id: number;
-    description: string;
+  reason: string;
+  id: number;
+  description: string;
 }
 
-const ReasonsCard: FC<ReasonsCardProps> = ({reason, id, description}) => {
+const ReasonsCard: FC<ReasonsCardProps> = ({ reason, id, description }) => {
   const [hover, setHover] = useState(false);
   return (
     <div onClick={() => console.log(id)}>

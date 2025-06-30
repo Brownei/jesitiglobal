@@ -8,8 +8,7 @@ redisClient.on('ready', () => logger.info('Cache is ready'));
 redisClient.on('end', () => logger.info('Cache disconnected'));
 redisClient.on('reconnecting', () => logger.info('Cache is reconnecting'));
 redisClient.on('error', (e) => {
-    logger.error(e);
-    console.log(e);
+  logger.error(e);
 });
 
 (async () => {
